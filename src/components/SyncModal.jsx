@@ -4,7 +4,6 @@ import QRCode from 'qrcode';
 const SyncModal = ({ isOpen, onClose }) => {
   const [step, setStep] = useState('intro'); // intro, create, join, qrcode, success
   const [walletId, setWalletId] = useState('');
-  const [remoteUrl, setRemoteUrl] = useState('');
   const [password, setPassword] = useState('');
   const [qrDataUrl, setQrDataUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,6 @@ const SyncModal = ({ isOpen, onClose }) => {
     try {
       const data = JSON.stringify({
         walletId,
-        remoteUrl,
         app: 'Savena'
       });
       const url = await QRCode.toDataURL(data, { width: 300 });
@@ -31,8 +29,8 @@ const SyncModal = ({ isOpen, onClose }) => {
   };
 
   const handleCreateWallet = async () => {
-    if (!remoteUrl) {
-      setError('Please enter CouchDB URL');
+    if (!password) {
+      setError('Please enter a password');
       return;
     }
 
@@ -41,7 +39,11 @@ const SyncModal = ({ isOpen, onClose }) => {
 
     try {
       const { syncService } = await import('../services/syncService');
-      const result = await syncService.createWallet(remoteUrl, password);
+      
+      // Store password in session for auto-sync
+      sessionStorage.setItem('savena_wallet_password', password);
+      
+      const result = await syncService.createWallet(password);
 
       if (result.success) {
         setWalletId(result.walletId);
@@ -57,8 +59,12 @@ const SyncModal = ({ isOpen, onClose }) => {
   };
 
   const handleJoinWallet = async () => {
-    if (!walletId || !remoteUrl) {
-      setError('Please enter Wallet ID and CouchDB URL');
+    if (!walletId) {
+      setError('Please enter Wallet ID');
+      return;
+    }
+    if (!password) {
+      setError('Please enter password');
       return;
     }
 
@@ -67,7 +73,11 @@ const SyncModal = ({ isOpen, onClose }) => {
 
     try {
       const { syncService } = await import('../services/syncService');
-      const result = await syncService.joinWallet(walletId, remoteUrl, password);
+      
+      // Store password in session for auto-sync
+      sessionStorage.setItem('savena_wallet_password', password);
+      
+      const result = await syncService.joinWallet(walletId, password);
 
       if (result.success) {
         setStep('success');
@@ -109,9 +119,9 @@ const SyncModal = ({ isOpen, onClose }) => {
               <div className="bg-ios-yellow/10 rounded-ios p-3 mb-4 text-left border border-ios-yellow/20">
                 <p className="text-xs text-ios-gray-800 font-semibold mb-1">Privacy Notice:</p>
                 <ul className="text-xs text-ios-gray-700 space-y-1">
-                  <li>• Data syncs to your own CouchDB server</li>
-                  <li>• Optional password protection</li>
-                  <li>• You control who has access</li>
+                  <li>• Data syncs to secure Cloudflare R2 storage</li>
+                  <li>• Password required for encryption</li>
+                  <li>• Share wallet ID with family members</li>
                   <li>• Local backup always maintained</li>
                 </ul>
               </div>
@@ -152,33 +162,17 @@ const SyncModal = ({ isOpen, onClose }) => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
-                    CouchDB URL *
-                  </label>
-                  <input
-                    type="url"
-                    value={remoteUrl}
-                    onChange={(e) => setRemoteUrl(e.target.value)}
-                    placeholder="https://your-couchdb.com"
-                    className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
-                  />
-                  <p className="text-xs text-ios-gray-600 mt-1">
-                    Use IBM Cloudant (free) or your own CouchDB server
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
-                    Password (optional)
+                    Password *
                   </label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Leave empty for no password"
+                    placeholder="Enter a secure password"
                     className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
                   />
                   <p className="text-xs text-ios-gray-600 mt-1">
-                    Recommended for shared wallets
+                    Required to protect your synced data
                   </p>
                 </div>
 
@@ -193,7 +187,7 @@ const SyncModal = ({ isOpen, onClose }) => {
             <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200 space-y-2">
               <button
                 onClick={handleCreateWallet}
-                disabled={loading || !remoteUrl}
+                disabled={loading || !password}
                 className="w-full px-4 py-3 rounded-ios font-semibold text-white bg-ios-blue hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating...' : 'Create Wallet'}
@@ -223,30 +217,20 @@ const SyncModal = ({ isOpen, onClose }) => {
                     placeholder="wallet_xxxxxxxxxxxx"
                     className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none font-mono text-sm"
                   />
+                  <p className="text-xs text-ios-gray-600 mt-1">
+                    Get this from the person who created the wallet
+                  </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
-                    CouchDB URL *
-                  </label>
-                  <input
-                    type="url"
-                    value={remoteUrl}
-                    onChange={(e) => setRemoteUrl(e.target.value)}
-                    placeholder="https://your-couchdb.com"
-                    className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
-                    Password
+                    Password *
                   </label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter if wallet has password"
+                    placeholder="Enter wallet password"
                     className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
                   />
                 </div>
@@ -262,7 +246,7 @@ const SyncModal = ({ isOpen, onClose }) => {
             <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200 space-y-2">
               <button
                 onClick={handleJoinWallet}
-                disabled={loading || !walletId || !remoteUrl}
+                disabled={loading || !walletId || !password}
                 className="w-full px-4 py-3 rounded-ios font-semibold text-white bg-ios-blue hover:bg-blue-600 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Joining...' : 'Join Wallet'}
@@ -291,14 +275,15 @@ const SyncModal = ({ isOpen, onClose }) => {
                 </div>
               )}
 
-              <div className="bg-ios-gray-50 rounded-ios p-3 mb-2">
+              <div className="bg-ios-gray-50 rounded-ios p-3">
                 <p className="text-xs text-ios-gray-600 mb-1">Wallet ID:</p>
                 <p className="font-mono text-sm text-ios-gray-900 break-all">{walletId}</p>
               </div>
 
-              <div className="bg-ios-gray-50 rounded-ios p-3">
-                <p className="text-xs text-ios-gray-600 mb-1">CouchDB URL:</p>
-                <p className="font-mono text-xs text-ios-gray-900 break-all">{remoteUrl}</p>
+              <div className="bg-ios-blue/5 border border-ios-blue/20 rounded-ios p-3 mt-4">
+                <p className="text-xs text-ios-gray-700">
+                  💡 Your data is now syncing to Cloudflare R2. Changes will automatically sync every 30 seconds.
+                </p>
               </div>
             </div>
 
