@@ -131,7 +131,7 @@ const RecurringTransactions = () => {
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-ios-gray-600">Monthly Income</span>
-              <span className="text-xs bg-ios-green/10 text-ios-green px-2 py-1 rounded-full">
+              <span className="hidden text-xs bg-ios-green/10 text-ios-green px-2 py-1 rounded-full">
                 Auto
               </span>
             </div>
@@ -143,7 +143,7 @@ const RecurringTransactions = () => {
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-ios-gray-600">Monthly Expenses</span>
-              <span className="text-xs bg-ios-red/10 text-ios-red px-2 py-1 rounded-full">
+              <span className="hidden text-xs bg-ios-red/10 text-ios-red px-2 py-1 rounded-full">
                 Auto
               </span>
             </div>
@@ -157,7 +157,7 @@ const RecurringTransactions = () => {
         <div className="flex space-x-2 ios-card p-1">
           <button
             onClick={() => setFilter('all')}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+            className={`text-sm flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
               filter === 'all'
                 ? 'bg-ios-blue text-white'
                 : 'text-ios-gray-600'
@@ -167,7 +167,7 @@ const RecurringTransactions = () => {
           </button>
           <button
             onClick={() => setFilter('active')}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+            className={`text-sm flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
               filter === 'active'
                 ? 'bg-ios-blue text-white'
                 : 'text-ios-gray-600'
@@ -177,7 +177,7 @@ const RecurringTransactions = () => {
           </button>
           <button
             onClick={() => setFilter('paused')}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
+            className={`text-sm flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
               filter === 'paused'
                 ? 'bg-ios-blue text-white'
                 : 'text-ios-gray-600'

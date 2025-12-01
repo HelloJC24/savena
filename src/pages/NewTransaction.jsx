@@ -8,6 +8,7 @@ import AlertModal from '../components/AlertModal';
 import { transactionDB, accountDB } from '../services/db';
 import { format } from 'date-fns';
 import { useModal } from '../hooks/useModal';
+import { formatCurrency } from '../utils/currency';
 
 const NewTransaction = () => {
   const navigate = useNavigate();
@@ -166,7 +167,7 @@ const NewTransaction = () => {
               <div className="ios-card p-5 mb-6 bg-gradient-to-br from-ios-gray-50 to-ios-gray-100">
                 <p className="text-sm text-ios-gray-600 mb-2">{selectedAccount.name}</p>
                 <p className={`text-3xl font-bold ${isDeposit ? 'text-ios-green' : 'text-ios-red'}`}>
-                  {isDeposit ? '+' : '-'}${parseFloat(formData.amount || 0).toFixed(2)}
+                  {isDeposit ? '+' : '-'}{formatCurrency(parseFloat(formData.amount || 0))}
                 </p>
               </div>
             )}
@@ -177,7 +178,7 @@ const NewTransaction = () => {
               onChange={(e) => handleChange('accountId', e.target.value)}
               options={accounts.map(acc => ({
                 value: acc.id,
-                label: `${acc.name} - $${acc.balance.toFixed(2)}`,
+                label: `${acc.name} - ${formatCurrency(acc.balance)}`,
               }))}
               placeholder="Select account"
               required
@@ -188,6 +189,7 @@ const NewTransaction = () => {
               type="number"
               step="0.01"
               min="0.01"
+              max="999999"
               value={formData.amount}
               onChange={(e) => handleChange('amount', e.target.value)}
               placeholder="0.00"
@@ -202,6 +204,7 @@ const NewTransaction = () => {
             <Input
               label="Description"
               type="text"
+              maxLength="20"
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder={`e.g., ${isDeposit ? 'Monthly salary' : 'Grocery shopping'}`}

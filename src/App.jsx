@@ -20,7 +20,7 @@ import './services/recurringProcessor';
 function App() {
   return (
     <Router>
-      <div className="font-sf w-full min-h-screen">
+      <div className="select-none font-sf w-full min-h-screen">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/accounts" element={<Accounts />} />

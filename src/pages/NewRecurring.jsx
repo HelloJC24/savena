@@ -9,6 +9,7 @@ import { recurringDB } from '../services/recurringDB';
 import { accountDB } from '../services/db';
 import { format } from 'date-fns';
 import { useModal } from '../hooks/useModal';
+import { formatCurrency } from '../utils/currency';
 
 const NewRecurring = () => {
   const navigate = useNavigate();
@@ -190,7 +191,7 @@ const NewRecurring = () => {
               onChange={(e) => handleChange('accountId', e.target.value)}
               options={accounts.map(acc => ({
                 value: acc.id,
-                label: `${acc.name} - $${acc.balance.toFixed(2)}`,
+                label: `${acc.name} - ${formatCurrency(acc.balance)}`,
               }))}
               placeholder="Select account"
               required

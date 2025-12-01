@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { format, parseISO, startOfMonth, endOfMonth, eachDayOfInterval, eachMonthOfInterval, startOfYear } from 'date-fns';
+import { formatCurrency } from '../utils/currency';
 
 const TrendChart = ({ transactions, period = 'month' }) => {
   const chartData = useMemo(() => {
@@ -43,13 +44,13 @@ const TrendChart = ({ transactions, period = 'month' }) => {
     return Object.values(dataMap);
   }, [transactions, period]);
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(value);
-  };
+//   const formatCurrency = (value) => {
+//     return new Intl.NumberFormat('en-US', {
+//       style: 'currency',
+//       currency: 'USD',
+//       minimumFractionDigits: 0,
+//     }).format(value);
+//   };
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {

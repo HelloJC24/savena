@@ -89,6 +89,7 @@ const NewAccount = () => {
           <Input
             label="Account Name"
             type="text"
+            maxLength="20"
             value={formData.name}
             onChange={(e) => handleChange('name', e.target.value)}
             placeholder="e.g., Savings, Checking"
@@ -103,6 +104,7 @@ const NewAccount = () => {
           <Input
             label="Description (Optional)"
             type="text"
+            maxLength="30"
             value={formData.description}
             onChange={(e) => handleChange('description', e.target.value)}
             placeholder="e.g., Main savings account"
@@ -112,6 +114,7 @@ const NewAccount = () => {
             label="Initial Balance"
             type="number"
             step="0.01"
+            max="9999999"
             value={formData.initialBalance}
             onChange={(e) => handleChange('initialBalance', e.target.value)}
             placeholder="0.00"

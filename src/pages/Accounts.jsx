@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import AccountCard from '../components/AccountCard';
 import Button from '../components/Button';
 import { accountDB } from '../services/db';
-
+import { formatCurrency } from '../utils/currency';
 const Accounts = () => {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,10 +25,7 @@ const Accounts = () => {
   };
 
   const totalBalance = accounts.reduce((sum, acc) => sum + (acc.balance || 0), 0);
-  const formattedTotal = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(totalBalance);
+  const formattedTotal = formatCurrency(totalBalance);
 
   if (loading) {
     return (

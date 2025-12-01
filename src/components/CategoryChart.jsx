@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { formatCurrency } from '../utils/currency';
 
 const CategoryChart = ({ transactions, type = 'withdraw' }) => {
   const categoryData = useMemo(() => {
@@ -25,12 +26,12 @@ const CategoryChart = ({ transactions, type = 'withdraw' }) => {
 
   const COLORS = ['#007AFF', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5AC8FA', '#FFCC00', '#FF2D55'];
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(value);
-  };
+//   const formatCurrency = (value) => {
+//     return new Intl.NumberFormat('en-US', {
+//       style: 'currency',
+//       currency: 'USD',
+//     }).format(value);
+//   };
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
