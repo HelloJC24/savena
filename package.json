@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "deploy": "echo 'Deployment handled by Cloudflare Pages'",
     "clean": "rm -rf dist node_modules package-lock.json",
     "reinstall": "npm run clean && npm install"
   },
