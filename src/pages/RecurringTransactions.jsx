@@ -122,12 +122,12 @@ const RecurringTransactions = () => {
     <div className="page-container">
       <Header 
         title="Recurring Transactions"
-        subtitle={`${stats.total} total • ${stats.active} active`}
+        subtitle={`${stats.total} total • Running Balance:${stats.monthlyIncome - stats.monthlyExpenses >= 0 ? ' +' : ' '}${formatCurrency(stats.monthlyIncome - stats.monthlyExpenses)}`}
       />
 
-      <div className="w-full max-w-2xl mx-auto px-4 py-4 space-y-4">
+      <div className="relative w-full max-w-2xl mx-auto px-4 py-4 space-y-4">
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="relative grid grid-cols-2 gap-3">
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-ios-gray-600">Monthly Income</span>
@@ -151,6 +151,7 @@ const RecurringTransactions = () => {
               {formatCurrency(stats.monthlyExpenses)}
             </div>
           </div>
+     
         </div>
 
         {/* Filter Tabs */}
@@ -186,6 +187,8 @@ const RecurringTransactions = () => {
             Paused ({stats.paused})
           </button>
         </div>
+
+       
 
         {/* Info Card */}
         <div className="ios-card p-4 bg-ios-blue/5 border border-ios-blue/20">
