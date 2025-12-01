@@ -1,0 +1,15 @@
+name = "savena-sync-api"
+main = "src/index.js"
+compatibility_date = "2025-12-01"
+
+# R2 bucket binding
+[[r2_buckets]]
+binding = "SAVENA_STORAGE"
+bucket_name = "savena-wallets"
+
+# CORS settings for your app
+[env.production]
+vars = { ALLOWED_ORIGINS = "https://savena.pages.dev" }
+
+[env.development]
+vars = { ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:5174,http://localhost:4173" }
