@@ -81,13 +81,15 @@ const Dashboard = () => {
 
       <div className="w-full max-w-2xl mx-auto px-4 py-4">
         {/* Sync Status Indicator */}
-        <div className="mb-4 flex justify-end">
+       
+        {/* Total Balance Card */}
+        <div className="ios-card-lg p-6 mb-6 bg-gradient-to-br from-ios-blue to-ios-indigo text-white">
+          
+           <div className="w-full flex justify-between items-center mb-2">
+            <p className="text-sm opacity-90">Total Balance</p>
           <SyncStatus />
         </div>
 
-        {/* Total Balance Card */}
-        <div className="ios-card-lg p-6 mb-6 bg-gradient-to-br from-ios-blue to-ios-indigo text-white">
-          <p className="text-sm opacity-90 mb-2">Total Balance</p>
           <h2 className="text-4xl font-bold mb-4">{formattedTotalBalance}</h2>
           <div className="flex space-x-3">
             <Link to="/transactions/new?type=deposit" className="flex-1">

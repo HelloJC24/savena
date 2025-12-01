@@ -119,10 +119,11 @@ async function getWallet(env, walletId, password, corsHeaders) {
   const passwordKey = `wallets/${walletId}/password`;
 
   // Verify password
-  const storedHash = await env.SAVENA_STORAGE.get(passwordKey, 'text');
-  if (!storedHash) {
+  const storedHashObj = await env.SAVENA_STORAGE.get(passwordKey);
+  if (!storedHashObj) {
     return jsonResponse({ error: 'Wallet not found' }, corsHeaders, 404);
   }
+  const storedHash = await storedHashObj.text();
 
   const isValid = await verifyPassword(password, storedHash);
   if (!isValid) {
@@ -130,10 +131,11 @@ async function getWallet(env, walletId, password, corsHeaders) {
   }
 
   // Get wallet data
-  const data = await env.SAVENA_STORAGE.get(walletKey, 'json');
-  if (!data) {
+  const dataObj = await env.SAVENA_STORAGE.get(walletKey);
+  if (!dataObj) {
     return jsonResponse({ error: 'Wallet data not found' }, corsHeaders, 404);
   }
+  const data = await dataObj.json();
 
   return jsonResponse(data, corsHeaders);
 }
@@ -146,10 +148,11 @@ async function updateWallet(env, walletId, password, request, corsHeaders) {
   const passwordKey = `wallets/${walletId}/password`;
 
   // Verify password
-  const storedHash = await env.SAVENA_STORAGE.get(passwordKey, 'text');
-  if (!storedHash) {
+  const storedHashObj = await env.SAVENA_STORAGE.get(passwordKey);
+  if (!storedHashObj) {
     return jsonResponse({ error: 'Wallet not found' }, corsHeaders, 404);
   }
+  const storedHash = await storedHashObj.text();
 
   const isValid = await verifyPassword(password, storedHash);
   if (!isValid) {
@@ -178,10 +181,11 @@ async function deleteWallet(env, walletId, password, corsHeaders) {
   const passwordKey = `wallets/${walletId}/password`;
 
   // Verify password
-  const storedHash = await env.SAVENA_STORAGE.get(passwordKey, 'text');
-  if (!storedHash) {
+  const storedHashObj = await env.SAVENA_STORAGE.get(passwordKey);
+  if (!storedHashObj) {
     return jsonResponse({ error: 'Wallet not found' }, corsHeaders, 404);
   }
+  const storedHash = await storedHashObj.text();
 
   const isValid = await verifyPassword(password, storedHash);
   if (!isValid) {
