@@ -44,7 +44,17 @@ export const recurringDB = {
       lastExecuted: null,
     };
     const id = await db.add('recurring', recurring);
-    return { ...recurring, id };
+    const result = { ...recurring, id };
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncChange('recurring', result);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
+    
+    return result;
   },
 
   // Get all recurring transactions
@@ -84,6 +94,15 @@ export const recurringDB = {
       updatedAt: new Date().toISOString(),
     };
     await db.put('recurring', updated);
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncChange('recurring', updated);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
+    
     return updated;
   },
 
@@ -91,6 +110,14 @@ export const recurringDB = {
   async delete(id) {
     const db = await initRecurringDB();
     await db.delete('recurring', id);
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncDelete('recurring', id);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
   },
 
   // Toggle active status

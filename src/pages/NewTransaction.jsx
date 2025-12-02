@@ -115,8 +115,8 @@ const NewTransaction = () => {
         {accounts.length === 0 ? (
           <div className="ios-card p-8 text-center">
             <div className="text-6xl mb-4">💳</div>
-            <h3 className="text-xl font-bold text-ios-gray-900 mb-2">No Accounts Yet</h3>
-            <p className="text-ios-gray-600 mb-4">Create an account first to add transactions</p>
+            <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white mb-2">No Accounts Yet</h3>
+            <p className="text-ios-gray-600 dark:text-ios-gray-400 mb-4">Create an account first to add transactions</p>
             <Button variant="primary" onClick={() => navigate('/accounts/new')}>
               Create Account
             </Button>
@@ -164,7 +164,7 @@ const NewTransaction = () => {
 
             {/* Preview Card */}
             {selectedAccount && formData.amount && (
-              <div className="ios-card p-5 mb-6 bg-gradient-to-br from-ios-gray-50 to-ios-gray-100">
+              <div className="ios-card p-5 mb-6 bg-gradient-to-br from-ios-gray-50 to-ios-gray-100 dark:from-ios-gray-800 dark:to-ios-gray-900">
                 <p className="text-sm text-ios-gray-600 mb-2">{selectedAccount.name}</p>
                 <p className={`text-3xl font-bold ${isDeposit ? 'text-ios-green' : 'text-ios-red'}`}>
                   {isDeposit ? '+' : '-'}{formatCurrency(parseFloat(formData.amount || 0))}

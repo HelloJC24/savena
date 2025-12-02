@@ -137,7 +137,7 @@ const NewAccount = () => {
                   className={`w-12 h-12 rounded-ios flex justify-center items-center text-2xl transition-all ${
                     formData.icon === icon
                       ? 'bg-ios-blue text-white scale-110'
-                      : 'bg-ios-gray-100'
+                      : 'bg-ios-gray-100 dark:bg-ios-gray-700'
                   }`}
                 >
                   {icon}

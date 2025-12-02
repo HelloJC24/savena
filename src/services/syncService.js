@@ -106,16 +106,21 @@ class SyncService {
 
       // Import data to local IndexedDB
       const { accountDB, transactionDB } = await import('./db');
+      const { recurringDB } = await import('./recurringDB');
       
       // Clear existing data
       const existingAccounts = await accountDB.getAll();
       const existingTransactions = await transactionDB.getAll();
+      const existingRecurring = await recurringDB.getAll();
       
       for (const acc of existingAccounts) {
         await accountDB.delete(acc.id);
       }
       for (const txn of existingTransactions) {
         await transactionDB.delete(txn.id);
+      }
+      for (const rec of existingRecurring) {
+        await recurringDB.delete(rec.id);
       }
 
       // Import wallet data
@@ -126,6 +131,10 @@ class SyncService {
       for (const txn of walletData.transactions || []) {
         const { id, ...data } = txn;
         await transactionDB.create(data);
+      }
+      for (const rec of walletData.recurring || []) {
+        const { id, ...data } = rec;
+        await recurringDB.create(data);
       }
 
       // Save settings
@@ -165,8 +174,16 @@ class SyncService {
 
       // Get current local data
       const { accountDB, transactionDB } = await import('./db');
+      const { recurringDB } = await import('./recurringDB');
       const accounts = await accountDB.getAll();
       const transactions = await transactionDB.getAll();
+      const recurring = await recurringDB.getAll();
+
+      // console.log('Pushing data to server:', {
+      //   accounts: accounts.length,
+      //   transactions: transactions.length,
+      //   recurring: recurring.length
+      // });
 
       // Update wallet on server
       const response = await fetch(`${API_URL}/api/wallet/${settings.walletId}`, {
@@ -177,7 +194,8 @@ class SyncService {
         },
         body: JSON.stringify({
           accounts,
-          transactions
+          transactions,
+          recurring
         })
       });
 
@@ -188,6 +206,11 @@ class SyncService {
 
       this.updateLastSyncTime();
       window.dispatchEvent(new CustomEvent('sync-change', { detail: { direction: 'push' } }));
+      
+      // Small delay then dispatch complete
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('sync-complete'));
+      }, 500);
 
       return { success: true };
     } catch (error) {
@@ -294,7 +317,15 @@ class SyncService {
 
       // Update local IndexedDB without clearing existing data
       const { accountDB, transactionDB, initDB } = await import('./db');
+      const { recurringDB, initRecurringDB } = await import('./recurringDB');
       const db = await initDB();
+      const recurringDb = await initRecurringDB();
+      
+      // console.log('Pulling data from server:', {
+      //   accounts: walletData.accounts?.length || 0,
+      //   transactions: walletData.transactions?.length || 0,
+      //   recurring: walletData.recurring?.length || 0
+      // });
       
       // Merge accounts (update existing, add new) - use direct db.put to avoid triggering sync
       for (const acc of walletData.accounts || []) {
@@ -302,10 +333,12 @@ class SyncService {
         if (existing) {
           if (new Date(acc.updatedAt) > new Date(existing.updatedAt)) {
             // Use direct db.put to avoid triggering sync and balance recalculation
+            // console.log('Updating account:', acc.id);
             await db.put('accounts', acc);
           }
         } else {
           // Create new account with existing ID
+          // console.log('Adding new account:', acc.id);
           await db.put('accounts', acc);
         }
       }
@@ -315,12 +348,32 @@ class SyncService {
         const existing = await transactionDB.getById(txn.id);
         if (!existing) {
           // Create new transaction with existing ID - no balance update needed as accounts already synced
+          // console.log('Adding new transaction:', txn.id, txn.description || txn.type);
           await db.put('transactions', txn);
+        }
+      }
+
+      // Merge recurring transactions (update existing, add new)
+      for (const rec of walletData.recurring || []) {
+        const existing = await recurringDB.getById(rec.id);
+        if (existing) {
+          // Update if server version is newer
+          if (new Date(rec.updatedAt || rec.createdAt) > new Date(existing.updatedAt || existing.createdAt)) {
+            await recurringDb.put('recurring', rec);
+          }
+        } else {
+          // Create new recurring transaction with existing ID
+          await recurringDb.put('recurring', rec);
         }
       }
 
       this.updateLastSyncTime();
       window.dispatchEvent(new CustomEvent('sync-change', { detail: { direction: 'pull' } }));
+      
+      // Small delay then dispatch complete
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('sync-complete'));
+      }, 500);
 
       return { success: true };
     } catch (error) {

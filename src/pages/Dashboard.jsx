@@ -11,6 +11,7 @@ import { formatCurrency } from '../utils/currency';
 import { format, startOfMonth, endOfMonth, parseISO } from 'date-fns';
 import * as syncService from '../services/syncService';
 
+
 const Dashboard = () => {
   const [accounts, setAccounts] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
@@ -20,6 +21,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     loadData();
+
+    // Listen for sync changes and reload data
+    const handleSyncChange = () => {
+      loadData();
+    };
+
+    window.addEventListener('sync-change', handleSyncChange);
+
+    return () => {
+      window.removeEventListener('sync-change', handleSyncChange);
+    };
   }, []);
 
   const loadData = async () => {

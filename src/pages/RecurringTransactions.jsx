@@ -27,10 +27,17 @@ const RecurringTransactions = () => {
       loadData(); // Reload to show updated nextDate
     };
     
+    // Listen for sync changes
+    const handleSyncChange = () => {
+      loadData();
+    };
+    
     window.addEventListener('recurring-executed', handleRecurringExecuted);
+    window.addEventListener('sync-change', handleSyncChange);
     
     return () => {
       window.removeEventListener('recurring-executed', handleRecurringExecuted);
+      window.removeEventListener('sync-change', handleSyncChange);
     };
   }, []);
 

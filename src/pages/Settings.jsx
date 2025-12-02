@@ -9,6 +9,7 @@ import SyncModal from '../components/SyncModal';
 import { getCurrencySettings } from '../services/currencySettings';
 import { syncService } from '../services/syncService';
 import { useTheme } from '../hooks/useTheme';
+import savenaLogo from '../assets/savena-logo.svg';
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -344,10 +345,12 @@ const Settings = () => {
       <div className="w-full max-w-2xl mx-auto px-4 py-4">
         {/* App Info */}
         <div className="ios-card p-6 mb-4 text-center">
-          <div className="text-6xl mb-4">💰</div>
+          <div className="text-6xl mb-4">
+            <img src={savenaLogo} alt="Savena Logo" className="w-16 h-16 mx-auto" />
+          </div>
           <h2 className="text-2xl font-bold text-ios-gray-900 dark:text-white mb-2">Savena</h2>
           <p className="text-ios-gray-600 dark:text-ios-gray-400">Virtual Bank App</p>
-          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.5</p>
+          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.6</p>
         </div>
 
         {/* Features */}
@@ -579,8 +582,8 @@ const Settings = () => {
           
           <div className="ios-card p-4">
             <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 leading-relaxed">
-              Savena is a progressive web app designed to help you track your finances. 
-              Create multiple accounts, record deposits and withdrawals, and monitor your 
+              Savena is designed to help you track your finances. 
+              Create multiple accounts, record deposits and withdrawals, setup recurring transactions, and monitor your 
               financial flow with ease. All data is stored locally on your device for privacy 
               and offline access.
             </p>

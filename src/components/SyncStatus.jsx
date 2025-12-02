@@ -10,6 +10,7 @@ const SyncStatus = () => {
 
     // Listen for sync events
     const handleSyncChange = () => setSyncState('syncing');
+    const handleSyncComplete = () => setSyncState('idle');
     const handleSyncPaused = () => setSyncState('paused');
     const handleSyncActive = () => setSyncState('syncing');
     const handleSyncError = () => setSyncState('error');
@@ -21,6 +22,7 @@ const SyncStatus = () => {
     };
 
     window.addEventListener('sync-change', handleSyncChange);
+    window.addEventListener('sync-complete', handleSyncComplete);
     window.addEventListener('sync-paused', handleSyncPaused);
     window.addEventListener('sync-active', handleSyncActive);
     window.addEventListener('sync-error', handleSyncError);
@@ -28,6 +30,7 @@ const SyncStatus = () => {
 
     return () => {
       window.removeEventListener('sync-change', handleSyncChange);
+      window.removeEventListener('sync-complete', handleSyncComplete);
       window.removeEventListener('sync-paused', handleSyncPaused);
       window.removeEventListener('sync-active', handleSyncActive);
       window.removeEventListener('sync-error', handleSyncError);
@@ -46,11 +49,11 @@ const SyncStatus = () => {
     idle: {
       icon: '☁️',
       text: 'Synced',
-      color: 'text-ios-green',
-      bg: 'bg-ios-green/10'
+      color: 'text-ios-white',
+      bg: 'bg-ios-blue/10'
     },
     syncing: {
-      icon: '🔄',
+      icon: '|',
       text: 'Syncing...',
       color: 'text-ios-blue',
       bg: 'bg-ios-blue/10'

@@ -117,8 +117,8 @@ const SyncModal = ({ isOpen, onClose }) => {
               </p>
               
               <div className="bg-ios-yellow/10 rounded-ios p-3 mb-4 text-left border border-ios-yellow/20">
-                <p className="text-xs text-ios-gray-800 font-semibold mb-1 dark:text-ios-gray-600">Privacy Notice:</p>
-                <ul className="text-xs text-ios-gray-700 space-y-1">
+                <p className="text-xs text-ios-gray-800 font-semibold mb-1 dark:text-ios-gray-400">Privacy Notice:</p>
+                <ul className="text-xs text-ios-gray-700 space-y-1 dark:text-ios-gray-400">
                   <li>• Data syncs to secure Cloudflare R2 storage</li>
                   <li>• Password required for encryption</li>
                   <li>• Share wallet ID with family members</li>
@@ -127,7 +127,7 @@ const SyncModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200 space-y-2">
+            <div className="p-4 bg-ios-gray-50 dark:bg-ios-gray-800 border-t border-ios-gray-200 dark:border-ios-gray-700 space-y-2">
               <button
                 onClick={() => setStep('create')}
                 className="w-full px-4 py-3 rounded-ios font-semibold text-white bg-ios-blue hover:bg-blue-600 active:scale-95 transition-all"
@@ -136,13 +136,13 @@ const SyncModal = ({ isOpen, onClose }) => {
               </button>
               <button
                 onClick={() => setStep('join')}
-                className="w-full px-4 py-3 rounded-ios font-semibold text-ios-blue bg-white border-2 border-ios-blue hover:bg-ios-blue/5 active:scale-95 transition-all"
+                className="w-full px-4 py-3 rounded-ios font-semibold text-ios-blue bg-white dark:bg-ios-gray-900 border-2 border-ios-blue hover:bg-ios-blue/5 active:scale-95 transition-all"
               >
                 Join Existing Wallet
               </button>
               <button
                 onClick={onClose}
-                className="w-full px-4 py-3 rounded-ios font-semibold text-ios-gray-700 bg-ios-gray-100 hover:bg-ios-gray-200 active:scale-95 transition-all"
+                className="w-full px-4 py-3 rounded-ios font-semibold text-ios-gray-700 dark:text-ios-gray-400 bg-ios-gray-100 dark:bg-ios-gray-700 hover:bg-ios-gray-200 dark:hover:bg-ios-gray-600 active:scale-95 transition-all"
               >
                 Cancel
               </button>
@@ -169,7 +169,7 @@ const SyncModal = ({ isOpen, onClose }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter a secure password"
-                    className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
+                    className="w-full px-4 py-3 dark:bg-ios-gray-900 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
                   />
                   <p className="text-xs text-ios-gray-600 mt-1">
                     Required to protect your synced data
@@ -184,7 +184,7 @@ const SyncModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200 space-y-2">
+            <div className="p-4 bg-ios-gray-50 dark:bg-ios-gray-800 border-t border-ios-gray-200 dark:border-ios-gray-700 space-y-2">
               <button
                 onClick={handleCreateWallet}
                 disabled={loading || !password}
@@ -203,11 +203,11 @@ const SyncModal = ({ isOpen, onClose }) => {
               <button onClick={() => setStep('intro')} className="text-ios-blue mb-4">
                 ← Back
               </button>
-              <h3 className="text-xl font-bold text-ios-gray-900 mb-4">Join Existing Wallet</h3>
+              <h3 className="text-xl font-bold text-ios-gray-900 dark:text-ios-gray-400 mb-4">Join Existing Wallet</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
+                  <label className="block text-sm font-semibold text-ios-gray-900 dark:text-ios-gray-400 mb-2">
                     Wallet ID *
                   </label>
                   <input
@@ -215,15 +215,15 @@ const SyncModal = ({ isOpen, onClose }) => {
                     value={walletId}
                     onChange={(e) => setWalletId(e.target.value)}
                     placeholder="wallet_xxxxxxxxxxxx"
-                    className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none font-mono text-sm"
+                    className="w-full px-4 py-3 rounded-ios dark:bg-ios-gray-900 border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none font-mono text-sm"
                   />
-                  <p className="text-xs text-ios-gray-600 mt-1">
+                  <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400 mt-1">
                     Get this from the person who created the wallet
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
+                  <label className="block text-sm font-semibold text-ios-gray-900 dark:text-ios-gray-400 mb-2">
                     Password *
                   </label>
                   <input
@@ -231,7 +231,7 @@ const SyncModal = ({ isOpen, onClose }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter wallet password"
-                    className="w-full px-4 py-3 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
+                    className="w-full px-4 py-3 dark:bg-ios-gray-900 rounded-ios border-2 border-ios-gray-300 focus:border-ios-blue focus:outline-none"
                   />
                 </div>
 
@@ -243,7 +243,7 @@ const SyncModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200 space-y-2">
+            <div className="p-4 bg-ios-gray-50 dark:bg-ios-gray-800 border-t border-ios-gray-200 dark:border-ios-gray-700 space-y-2">
               <button
                 onClick={handleJoinWallet}
                 disabled={loading || !walletId || !password}
@@ -264,30 +264,30 @@ const SyncModal = ({ isOpen, onClose }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-ios-gray-900 mb-2">Wallet Created!</h3>
-              <p className="text-sm text-ios-gray-700 mb-4">
+              <h3 className="text-xl font-bold text-ios-gray-900 dark:text-ios-gray-400 mb-2">Wallet Created!</h3>
+              <p className="text-sm text-ios-gray-700 dark:text-ios-gray-400 mb-4">
                 Share this QR code or Wallet ID with family members
               </p>
 
               {qrDataUrl && (
-                <div className="bg-white p-4 rounded-ios border-2 border-ios-gray-200 mb-4">
+                <div className="bg-white dark:bg-ios-gray-900 p-4 rounded-ios border-2 border-ios-gray-200 dark:border-ios-gray-700 mb-4">
                   <img src={qrDataUrl} alt="QR Code" className="w-full max-w-xs mx-auto" />
                 </div>
               )}
 
-              <div className="bg-ios-gray-50 rounded-ios p-3">
-                <p className="text-xs text-ios-gray-600 mb-1">Wallet ID:</p>
-                <p className="font-mono text-sm text-ios-gray-900 break-all">{walletId}</p>
+              <div className="bg-ios-gray-50 dark:bg-ios-gray-800 rounded-ios p-3">
+                <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400 mb-1">Wallet ID:</p>
+                <p className="font-mono text-sm text-ios-gray-900 dark:text-ios-gray-400 break-all">{walletId}</p>
               </div>
 
               <div className="bg-ios-blue/5 border border-ios-blue/20 rounded-ios p-3 mt-4">
-                <p className="text-xs text-ios-gray-700">
+                <p className="text-xs text-ios-gray-700 dark:text-ios-gray-400">
                   💡 Your data is now syncing to Cloudflare R2. Changes will automatically sync every 30 seconds.
                 </p>
               </div>
             </div>
 
-            <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200">
+            <div className="p-4 bg-ios-gray-50 dark:bg-ios-gray-800 border-t border-ios-gray-200 dark:border-ios-gray-700">
               <button
                 onClick={handleComplete}
                 className="w-full px-4 py-3 rounded-ios font-semibold text-white bg-ios-green hover:bg-green-600 active:scale-95 transition-all"
@@ -307,19 +307,19 @@ const SyncModal = ({ isOpen, onClose }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-ios-gray-900 mb-2">Successfully Connected!</h3>
-              <p className="text-sm text-ios-gray-700 mb-4">
+              <h3 className="text-xl font-bold text-ios-gray-900 dark:text-ios-gray-400 mb-2">Successfully Connected!</h3>
+              <p className="text-sm text-ios-gray-700 dark:text-ios-gray-400 mb-4">
                 Your wallet is now syncing. Changes will automatically sync across all connected devices.
               </p>
 
               <div className="bg-ios-blue/10 rounded-ios p-4 mb-4">
-                <p className="text-sm text-ios-gray-800">
+                <p className="text-sm text-ios-gray-800 dark:text-ios-gray-400">
                   The app will reload to apply sync settings.
                 </p>
               </div>
             </div>
 
-            <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200">
+            <div className="p-4 bg-ios-gray-50 dark:bg-ios-gray-800 border-t border-ios-gray-200 dark:border-ios-gray-700">
               <button
                 onClick={handleComplete}
                 className="w-full px-4 py-3 rounded-ios font-semibold text-white bg-ios-green hover:bg-green-600 active:scale-95 transition-all"

@@ -11,6 +11,17 @@ const Accounts = () => {
 
   useEffect(() => {
     loadAccounts();
+
+    // Listen for sync changes and reload data
+    const handleSyncChange = () => {
+      loadAccounts();
+    };
+
+    window.addEventListener('sync-change', handleSyncChange);
+
+    return () => {
+      window.removeEventListener('sync-change', handleSyncChange);
+    };
   }, []);
 
   const loadAccounts = async () => {

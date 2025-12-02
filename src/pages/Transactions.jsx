@@ -56,6 +56,17 @@ const Transactions = () => {
 
   useEffect(() => {
     loadData();
+
+    // Listen for sync changes and reload data
+    const handleSyncChange = () => {
+      loadData();
+    };
+
+    window.addEventListener('sync-change', handleSyncChange);
+
+    return () => {
+      window.removeEventListener('sync-change', handleSyncChange);
+    };
   }, []);
 
   useEffect(() => {
