@@ -270,7 +270,7 @@ const SyncModal = ({ isOpen, onClose }) => {
               </p>
 
               {qrDataUrl && (
-                <div className="bg-white dark:bg-ios-gray-900 p-4 rounded-ios border-2 border-ios-gray-200 dark:border-ios-gray-700 mb-4">
+                <div className="hidden bg-white dark:bg-ios-gray-900 p-4 rounded-ios border-2 border-ios-gray-200 dark:border-ios-gray-700 mb-4">
                   <img src={qrDataUrl} alt="QR Code" className="w-full max-w-xs mx-auto" />
                 </div>
               )}

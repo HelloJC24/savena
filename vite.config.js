@@ -20,12 +20,12 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: 'pwa-192x192-logo.png',
+            src: '192savena.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'pwa-512x512-logo.png',
+            src: '512savena.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'

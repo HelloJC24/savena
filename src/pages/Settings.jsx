@@ -350,7 +350,7 @@ const Settings = () => {
           </div>
           <h2 className="text-2xl font-bold text-ios-gray-900 dark:text-white mb-2">Savena</h2>
           <p className="text-ios-gray-600 dark:text-ios-gray-400">Virtual Bank App</p>
-          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.6</p>
+          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.7</p>
         </div>
 
         {/* Features */}

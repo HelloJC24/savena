@@ -45,8 +45,10 @@ class SyncService {
       
       // Get current local data
       const { accountDB, transactionDB } = await import('./db');
+      const { recurringDB } = await import('./recurringDB');
       const accounts = await accountDB.getAll();
       const transactions = await transactionDB.getAll();
+      const recurring = await recurringDB.getAll();
 
       // Create wallet on server
       const response = await fetch(`${API_URL}/api/wallet/${walletId}`, {
@@ -57,7 +59,8 @@ class SyncService {
         },
         body: JSON.stringify({
           accounts,
-          transactions
+          transactions,
+          recurring
         })
       });
 
@@ -105,8 +108,12 @@ class SyncService {
       const walletData = await response.json();
 
       // Import data to local IndexedDB
-      const { accountDB, transactionDB } = await import('./db');
-      const { recurringDB } = await import('./recurringDB');
+      const { accountDB, transactionDB, initDB } = await import('./db');
+      const { recurringDB, initRecurringDB } = await import('./recurringDB');
+      
+      // Get direct database access to preserve IDs
+      const db = await initDB();
+      const recurringDb = await initRecurringDB();
       
       // Clear existing data
       const existingAccounts = await accountDB.getAll();
@@ -123,18 +130,15 @@ class SyncService {
         await recurringDB.delete(rec.id);
       }
 
-      // Import wallet data
+      // Import wallet data with ORIGINAL IDs preserved using direct db.put
       for (const acc of walletData.accounts || []) {
-        const { id, ...data } = acc;
-        await accountDB.create(data);
+        await db.put('accounts', acc);
       }
       for (const txn of walletData.transactions || []) {
-        const { id, ...data } = txn;
-        await transactionDB.create(data);
+        await db.put('transactions', txn);
       }
       for (const rec of walletData.recurring || []) {
-        const { id, ...data } = rec;
-        await recurringDB.create(data);
+        await recurringDb.put('recurring', rec);
       }
 
       // Save settings
