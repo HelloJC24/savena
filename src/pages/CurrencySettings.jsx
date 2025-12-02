@@ -58,7 +58,7 @@ const CurrencySettings = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search currency..."
-              className="w-full px-4 py-3 pl-10 rounded-ios-lg border border-ios-gray-200 focus:border-ios-blue focus:ring-2 focus:ring-ios-blue/20 outline-none transition-all"
+              className="w-full px-4 py-3 pl-10 bg-white dark:bg-ios-gray-800 dark:text-white rounded-ios-lg border border-ios-gray-200 dark:border-ios-gray-700 focus:border-ios-blue focus:ring-2 focus:ring-ios-blue/20 outline-none transition-all"
             />
             <svg 
               className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-ios-gray-400" 
@@ -73,29 +73,29 @@ const CurrencySettings = () => {
 
         {/* Currency List */}
         <div className="mb-6">
-          <h3 className="text-sm font-semibold text-ios-gray-600 uppercase mb-3">
+          <h3 className="text-sm text-ios-gray-600 dark:text-ios-gray-400 font-semibold uppercase mb-3">
             Select Currency
           </h3>
-          <div className="ios-card divide-y divide-ios-gray-200">
+          <div className="ios-card divide-y divide-ios-gray-200 dark:divide-ios-gray-700">
             {filteredCurrencies.map((currency) => (
               <button
                 key={currency.code}
                 onClick={() => setSelectedCurrency(currency)}
-                className={`w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 transition-colors ${
-                  selectedCurrency.code === currency.code ? 'bg-ios-blue/5' : ''
+                className={`w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors ${
+                  selectedCurrency.code === currency.code ? 'bg-ios-blue/5 dark:bg-ios-blue/10' : ''
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold ${
                     selectedCurrency.code === currency.code 
                       ? 'bg-ios-blue text-white' 
-                      : 'bg-ios-gray-100 text-ios-gray-600'
+                      : 'bg-ios-gray-100 dark:bg-ios-gray-700 text-ios-gray-600 dark:text-ios-gray-300'
                   }`}>
                     {currency.symbol}
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold text-ios-gray-900">{currency.name}</p>
-                    <p className="text-sm text-ios-gray-600">{currency.code}</p>
+                    <p className="font-semibold text-ios-gray-900 dark:text-white">{currency.name}</p>
+                    <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">{currency.code}</p>
                   </div>
                 </div>
                 {selectedCurrency.code === currency.code && (
@@ -109,12 +109,12 @@ const CurrencySettings = () => {
         </div>
 
         {/* Info Card */}
-        <div className="ios-card p-4 mb-6 bg-ios-blue/5 border border-ios-blue/20">
+        <div className="ios-card p-4 mb-6 bg-ios-blue/5 dark:bg-ios-blue/10 border border-ios-blue/20 dark:border-ios-blue/30">
           <div className="flex items-start space-x-3">
             <div className="text-2xl">ℹ️</div>
             <div>
-              <h3 className="font-semibold text-ios-gray-900 mb-1">Currency Display</h3>
-              <p className="text-sm text-ios-gray-700">
+              <h3 className="font-semibold text-ios-gray-900 dark:text-white mb-1">Currency Display</h3>
+              <p className="text-sm text-ios-gray-700 dark:text-ios-gray-300">
                 All amounts throughout the app will be displayed in your selected currency. 
                 This setting is stored locally on your device.
               </p>

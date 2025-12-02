@@ -22,8 +22,8 @@ const StatCard = ({ title, value, change, icon, color = 'blue' }) => {
           </div>
         )}
       </div>
-      <p className="text-sm text-ios-gray-600 mb-1">{title}</p>
-      <p className="text-2xl font-bold text-ios-gray-900">{value}</p>
+      <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 mb-1">{title}</p>
+      <p className="text-2xl font-bold text-ios-gray-900 dark:text-white">{value}</p>
     </div>
   );
 };

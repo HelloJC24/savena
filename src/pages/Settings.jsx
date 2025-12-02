@@ -8,10 +8,12 @@ import ConfirmModal from '../components/ConfirmModal';
 import SyncModal from '../components/SyncModal';
 import { getCurrencySettings } from '../services/currencySettings';
 import { syncService } from '../services/syncService';
+import { useTheme } from '../hooks/useTheme';
 
 const Settings = () => {
   const navigate = useNavigate();
   const currentCurrency = getCurrencySettings();
+  const { theme, isDark, toggleTheme } = useTheme();
 
   // Modal states
   const [alertModal, setAlertModal] = useState({ isOpen: false, title: '', message: '', type: 'info' });
@@ -343,19 +345,19 @@ const Settings = () => {
         {/* App Info */}
         <div className="ios-card p-6 mb-4 text-center">
           <div className="text-6xl mb-4">💰</div>
-          <h2 className="text-2xl font-bold text-ios-gray-900 mb-2">Savena</h2>
-          <p className="text-ios-gray-600">Virtual Bank App</p>
-          <p className="text-sm text-ios-gray-500 mt-2">Version 1.2.4</p>
+          <h2 className="text-2xl font-bold text-ios-gray-900 dark:text-white mb-2">Savena</h2>
+          <p className="text-ios-gray-600 dark:text-ios-gray-400">Virtual Bank App</p>
+          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.5</p>
         </div>
 
         {/* Features */}
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-ios-gray-900 mb-3">Features</h3>
+          <h3 className="text-lg font-bold text-ios-gray-900 dark:text-white mb-3">Features</h3>
           
-          <div className="space-y-4 ios-card divide-y divide-ios-gray-200">
+          <div className="space-y-4 ios-card dark:bg-ios-gray-800 divide-y divide-ios-gray-200 dark:divide-ios-gray-700">
             <button
               onClick={() => navigate('/currency')}
-              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
             >
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-ios-green/10 flex items-center justify-center">
@@ -364,8 +366,8 @@ const Settings = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-ios-gray-900">Currency Settings</p>
-                  <p className="text-sm text-ios-gray-600">{currentCurrency.code} - {currentCurrency.name}</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Currency Settings</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">{currentCurrency.code} - {currentCurrency.name}</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -375,7 +377,7 @@ const Settings = () => {
 
             <button
               onClick={() => navigate('/recurring')}
-              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
             >
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-ios-blue/10 flex items-center justify-center">
@@ -384,34 +386,66 @@ const Settings = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-ios-gray-900">Recurring Transactions</p>
-                  <p className="text-sm text-ios-gray-600">Automatic payments & income</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Recurring Transactions</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Automatic payments & income</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
+
+            <div className="p-4 flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-ios-purple/10 flex items-center justify-center">
+                  {isDark ? (
+                    <svg className="w-5 h-5 text-ios-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-ios-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Appearance</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">{isDark ? 'Dark' : 'Light'} Mode</p>
+                </div>
+              </div>
+              <button
+                onClick={toggleTheme}
+                className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                  isDark ? 'bg-ios-blue' : 'bg-ios-gray-300'
+                }`}
+              >
+                <span
+                  className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                    isDark ? 'translate-x-7' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Data Management */}
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-ios-gray-900 mb-3">Data Management</h3>
+          <h3 className="text-lg font-bold text-ios-gray-900 dark:text-white mb-3">Data Management</h3>
           
-          <div className="space-y-4 ios-card divide-y divide-ios-gray-200">
+          <div className="space-y-4 ios-card divide-y divide-ios-gray-200 dark:divide-ios-gray-700">
             {/* Sync Toggle */}
             <div className="p-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 rounded-full ${syncEnabled ? 'bg-ios-green/10' : 'bg-ios-gray-100'} flex items-center justify-center`}>
-                    <svg className={`w-5 h-5 ${syncEnabled ? 'text-ios-green' : 'text-ios-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className={`w-10 h-10 rounded-full ${syncEnabled ? 'bg-ios-green/10' : 'bg-ios-gray-100 dark:bg-ios-gray-700'} flex items-center justify-center`}>
+                    <svg className={`w-5 h-5 ${syncEnabled ? 'text-ios-green' : 'text-ios-gray-600 dark:text-ios-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold text-ios-gray-900">Wallet Sync</p>
-                    <p className="text-sm text-ios-gray-600">
+                    <p className="font-semibold text-ios-gray-900 dark:text-white">Wallet Sync</p>
+                    <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">
                       {syncEnabled ? 'Syncing with cloud' : 'Enable family sharing'}
                     </p>
                   </div>
@@ -419,7 +453,7 @@ const Settings = () => {
                 <button
                   onClick={handleSyncToggle}
                   className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
-                    syncEnabled ? 'bg-ios-green' : 'bg-ios-gray-300'
+                    syncEnabled ? 'bg-ios-green' : 'bg-ios-gray-300 dark:bg-ios-gray-600'
                   }`}
                 >
                   <span
@@ -432,9 +466,9 @@ const Settings = () => {
 
               {syncEnabled && syncSettings && (
                 <div className="mt-3 space-y-2">
-                  <div className="bg-ios-gray-50 rounded-ios p-3">
+                  <div className="bg-ios-gray-50 dark:bg-ios-gray-700 rounded-ios p-3">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-xs text-ios-gray-600">Wallet ID:</p>
+                      <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400">Wallet ID:</p>
                       <button
                         onClick={handleCopyWalletId}
                         className="text-xs text-ios-blue font-semibold"
@@ -442,10 +476,10 @@ const Settings = () => {
                         Copy
                       </button>
                     </div>
-                    <p className="font-mono text-xs text-ios-gray-900 break-all">{syncSettings.walletId}</p>
+                    <p className="font-mono text-xs text-ios-gray-900 dark:text-white break-all">{syncSettings.walletId}</p>
                   </div>
                   {syncSettings.lastSync && (
-                    <p className="text-xs text-ios-gray-600">
+                    <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400">
                       Last synced: {new Date(syncSettings.lastSync).toLocaleString()}
                     </p>
                   )}
@@ -454,7 +488,7 @@ const Settings = () => {
             </div>
             <button
               onClick={handleImportData}
-              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
             >
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-ios-green/10 flex items-center justify-center">
@@ -463,8 +497,8 @@ const Settings = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-ios-gray-900">Import Data</p>
-                  <p className="text-sm text-ios-gray-600">Restore from backup JSON</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Import Data</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Restore from backup JSON</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -474,7 +508,7 @@ const Settings = () => {
 
             <button
               onClick={handleExportData}
-              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
             >
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-ios-blue/10 flex items-center justify-center">
@@ -483,8 +517,8 @@ const Settings = () => {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-ios-gray-900">Export Data</p>
-                  <p className="text-sm text-ios-gray-600">Download backup as JSON</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Export Data</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Download backup as JSON</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -494,7 +528,7 @@ const Settings = () => {
 
             <button
               onClick={handleClearData}
-              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 transition-colors"
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
             >
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-ios-red/10 flex items-center justify-center">
@@ -504,7 +538,7 @@ const Settings = () => {
                 </div>
                 <div className="text-left">
                   <p className="font-semibold text-ios-red">Clear All Data</p>
-                  <p className="text-sm text-ios-gray-600">Delete all accounts & transactions</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Delete all accounts & transactions</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -541,10 +575,10 @@ const Settings = () => {
 
         {/* About */}
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-ios-gray-900 mb-3">About</h3>
+          <h3 className="text-lg font-bold text-ios-gray-900 dark:text-white mb-3">About</h3>
           
           <div className="ios-card p-4">
-            <p className="text-sm text-ios-gray-600 leading-relaxed">
+            <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 leading-relaxed">
               Savena is a progressive web app designed to help you track your finances. 
               Create multiple accounts, record deposits and withdrawals, and monitor your 
               financial flow with ease. All data is stored locally on your device for privacy 

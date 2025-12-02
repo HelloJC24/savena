@@ -116,7 +116,7 @@ const Transactions = () => {
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ios-blue mx-auto"></div>
-          <p className="mt-4 text-ios-gray-600">Loading transactions...</p>
+          <p className="mt-4 text-ios-gray-600 dark:text-ios-gray-400">Loading transactions...</p>
         </div>
       </div>
     );
@@ -220,14 +220,14 @@ const Transactions = () => {
             {/* Chart Type Toggle */}
             <div className="ios-card p-4 mb-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-ios-gray-900">Insights</h3>
+                <h3 className="font-semibold text-ios-gray-900 dark:text-white">Insights</h3>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setChartType('trend')}
                     className={`px-3 py-1 text-sm rounded-full transition-colors ${
                       chartType === 'trend'
                         ? 'bg-ios-blue text-white'
-                        : 'bg-ios-gray-100 text-ios-gray-700'
+                        : 'bg-ios-gray-100 dark:bg-ios-gray-700 text-ios-gray-700 dark:text-ios-gray-300'
                     }`}
                   >
                     Trend
@@ -237,7 +237,7 @@ const Transactions = () => {
                     className={`px-3 py-1 text-sm rounded-full transition-colors ${
                       chartType === 'category'
                         ? 'bg-ios-blue text-white'
-                        : 'bg-ios-gray-100 text-ios-gray-700'
+                        : 'bg-ios-gray-100 dark:bg-ios-gray-700 text-ios-gray-700 dark:text-ios-gray-300'
                     }`}
                   >
                     Category
@@ -251,7 +251,7 @@ const Transactions = () => {
                     <select
                       value={chartPeriod}
                       onChange={(e) => setChartPeriod(e.target.value)}
-                      className="px-3 py-1 text-sm rounded-ios bg-ios-gray-50 border border-ios-gray-200 focus:outline-none focus:ring-2 focus:ring-ios-blue"
+                      className="px-3 py-1 text-sm rounded-ios bg-ios-gray-50 dark:bg-ios-gray-700 border border-ios-gray-200 dark:border-ios-gray-600 text-ios-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-ios-blue"
                     >
                       <option value="month">This Month</option>
                       <option value="year">This Year</option>
@@ -265,7 +265,7 @@ const Transactions = () => {
                     <select
                       value={filters.type || 'withdraw'}
                       onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-                      className="px-3 py-1 text-sm rounded-ios bg-ios-gray-50 border border-ios-gray-200 focus:outline-none focus:ring-2 focus:ring-ios-blue"
+                      className="px-3 py-1 text-sm rounded-ios bg-ios-gray-50 dark:bg-ios-gray-700 border border-ios-gray-200 dark:border-ios-gray-600 text-ios-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-ios-blue"
                     >
                       <option value="withdraw">Withdrawals</option>
                       <option value="deposit">Deposits</option>
@@ -367,10 +367,10 @@ const Transactions = () => {
         ) : (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="text-8xl mb-6">📊</div>
-            <h3 className="text-2xl font-bold text-ios-gray-900 mb-2">
+            <h3 className="text-2xl font-bold text-ios-gray-900 dark:text-white mb-2">
               {hasActiveFilters ? 'No Results' : 'No Transactions'}
             </h3>
-            <p className="text-ios-gray-600 mb-6 text-center max-w-sm">
+            <p className="text-ios-gray-600 dark:text-ios-gray-400 mb-6 text-center max-w-sm">
               {hasActiveFilters 
                 ? 'Try adjusting your filters'
                 : 'Start tracking your finances by adding a transaction'

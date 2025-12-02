@@ -5,17 +5,17 @@ const ImportOptionsModal = ({ isOpen, onClose, onMerge, onReplace, importSummary
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-ios-lg shadow-ios-xl max-w-md w-full mx-4 overflow-hidden animate-scale-up">
+      <div className="bg-white dark:bg-ios-gray-900 rounded-ios-lg shadow-ios-xl max-w-md w-full mx-4 overflow-hidden animate-scale-up">
         <div className="p-6">
-          <h3 className="text-xl font-bold text-ios-gray-900 mb-4 text-center">Import Data</h3>
+          <h3 className="text-xl font-bold text-ios-gray-900 mb-4 text-center dark:text-white">Import Data</h3>
           
           {/* Import Summary */}
           {importSummary && (
-            <div className="bg-ios-gray-50 rounded-ios p-4 mb-6">
-              <p className="text-sm text-ios-gray-700 mb-2">
+            <div className="bg-ios-gray-50 dark:bg-ios-gray-800 rounded-ios p-4 mb-6">
+              <p className="text-sm text-ios-gray-700 dark:text-ios-gray-400 mb-2">
                 <strong>Import File Contains:</strong>
               </p>
-              <ul className="text-sm text-ios-gray-700 space-y-1">
+              <ul className="text-sm text-ios-gray-700 dark:text-ios-gray-400 space-y-1">
                 <li>📊 {importSummary.accounts} account{importSummary.accounts !== 1 ? 's' : ''}</li>
                 <li>💸 {importSummary.transactions} transaction{importSummary.transactions !== 1 ? 's' : ''}</li>
                 <li>📅 Exported on {importSummary.exportDate}</li>

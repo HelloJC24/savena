@@ -44,7 +44,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-ios-gray-200 safe-area-bottom z-50 w-full">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-ios-gray-900 border-t border-ios-gray-200 dark:border-ios-gray-700 safe-area-bottom z-50 w-full">
       <div className="flex justify-around items-center h-16 px-2 max-w-2xl mx-auto w-full">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
@@ -53,7 +53,7 @@ const BottomNav = () => {
               key={item.path}
               to={item.path}
               className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${
-                isActive ? 'text-ios-blue' : 'text-ios-gray-500'
+                isActive ? 'text-ios-blue' : 'text-ios-gray-500 dark:text-ios-gray-400'
               }`}
             >
               <div className="mb-1">{item.icon}</div>

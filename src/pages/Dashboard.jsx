@@ -9,12 +9,14 @@ import SyncStatus from '../components/SyncStatus';
 import { accountDB, transactionDB } from '../services/db';
 import { formatCurrency } from '../utils/currency';
 import { format, startOfMonth, endOfMonth, parseISO } from 'date-fns';
+import * as syncService from '../services/syncService';
 
 const Dashboard = () => {
   const [accounts, setAccounts] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [totalBalance, setTotalBalance] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -34,6 +36,20 @@ const Dashboard = () => {
       console.error('Error loading data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    if (refreshing) return;
+    
+    setRefreshing(true);
+    try {
+      await syncService.pullFromServer();
+      await loadData();
+    } catch (error) {
+      console.error('Error refreshing:', error);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -87,7 +103,30 @@ const Dashboard = () => {
           
            <div className="w-full flex justify-between items-center mb-2">
             <p className="text-sm opacity-90">Total Balance</p>
-          <SyncStatus />
+            <div className="flex justify-end items-center space-x-2">
+               <SyncStatus />
+              <button
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="p-1.5 rounded-full hover:bg-white/10 transition-colors disabled:opacity-50"
+                title="Refresh data"
+              >
+                <svg 
+                  className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+                  />
+                </svg>
+              </button>
+             
+            </div>
         </div>
 
           <h2 className="text-4xl font-bold mb-4">{formattedTotalBalance}</h2>
@@ -142,7 +181,7 @@ const Dashboard = () => {
         {/* Monthly Overview */}
         {monthlyStats.count > 0 && (
           <div className="ios-card p-4 mb-6">
-            <h3 className="font-semibold text-ios-gray-900 mb-4">This Month</h3>
+            <h3 className="font-semibold text-ios-gray-900 dark:text-white mb-4">This Month</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
@@ -151,7 +190,7 @@ const Dashboard = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                   </div>
-                  <span className="text-sm text-ios-gray-700">Deposits</span>
+                  <span className="text-sm text-ios-gray-700 dark:text-ios-gray-400">Deposits</span>
                 </div>
                 <span className="font-bold text-ios-green">
                   {formatCurrency(monthlyStats.deposits)}
@@ -164,7 +203,7 @@ const Dashboard = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                     </svg>
                   </div>
-                  <span className="text-sm text-ios-gray-700">Withdrawals</span>
+                  <span className="text-sm text-ios-gray-700 dark:text-ios-gray-400">Withdrawals</span>
                 </div>
                 <span className="font-bold text-ios-red">
                   {formatCurrency(monthlyStats.withdrawals)}
@@ -172,7 +211,7 @@ const Dashboard = () => {
               </div>
               <div className="pt-3 border-t border-ios-gray-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-ios-gray-900">Net Change</span>
+                  <span className="text-sm font-semibold text-ios-gray-900 dark:text-white">Net Change</span>
                   <span className={`font-bold ${monthlyStats.deposits - monthlyStats.withdrawals >= 0 ? 'text-ios-green' : 'text-ios-red'}`}>
                     {formatCurrency(monthlyStats.deposits - monthlyStats.withdrawals)}
                   </span>
@@ -185,7 +224,7 @@ const Dashboard = () => {
         {/* Accounts Section */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-ios-gray-900">Accounts</h3>
+            <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white">Accounts</h3>
             <Link to="/accounts">
               <span className="text-ios-blue text-sm font-medium">See All</span>
             </Link>
@@ -203,7 +242,7 @@ const Dashboard = () => {
           ) : (
             <div className="ios-card p-8 text-center">
               <div className="text-6xl mb-4">💳</div>
-              <p className="text-ios-gray-600 mb-4">No accounts yet</p>
+              <p className="text-ios-gray-600 dark:text-ios-gray-400 mb-4">No accounts yet</p>
               <Link to="/accounts/new">
                 <Button variant="primary">Create Account</Button>
               </Link>
@@ -214,7 +253,7 @@ const Dashboard = () => {
         {/* Recent Transactions */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-ios-gray-900">Recent Transactions</h3>
+            <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white">Recent Transactions</h3>
             <Link to="/transactions">
               <span className="text-ios-blue text-sm font-medium">See All</span>
             </Link>
@@ -236,7 +275,7 @@ const Dashboard = () => {
           ) : (
             <div className="ios-card p-8 text-center">
               <div className="text-6xl mb-4">📊</div>
-              <p className="text-ios-gray-600 mb-4">No transactions yet</p>
+              <p className="text-ios-gray-600 dark:text-ios-gray-400 mb-4">No transactions yet</p>
               <Link to="/transactions/new">
                 <Button variant="primary">Add Transaction</Button>
               </Link>

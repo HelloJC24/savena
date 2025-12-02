@@ -32,7 +32,7 @@ const Accounts = () => {
       <div className="page-container flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-ios-blue mx-auto"></div>
-          <p className="mt-4 text-ios-gray-600">Loading accounts...</p>
+          <p className="mt-4 text-ios-gray-600 dark:text-ios-gray-400">Loading accounts...</p>
         </div>
       </div>
     );
@@ -68,8 +68,8 @@ const Accounts = () => {
         ) : (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="text-8xl mb-6">💳</div>
-            <h3 className="text-2xl font-bold text-ios-gray-900 mb-2">No Accounts</h3>
-            <p className="text-ios-gray-600 mb-6 text-center max-w-sm">
+            <h3 className="text-2xl font-bold text-ios-gray-900 mb-2 dark:text-white">No Accounts</h3>
+            <p className="text-ios-gray-600 dark:text-ios-gray-400 mb-6 text-center max-w-sm">
               Create your first account to start tracking your finances
             </p>
             <Link to="/accounts/new">

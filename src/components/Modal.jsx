@@ -13,11 +13,11 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       
       {/* Modal */}
       <div className="flex min-h-full items-end justify-center p-0 text-center sm:items-center sm:p-4">
-        <div className="relative transform overflow-hidden rounded-t-ios-lg sm:rounded-ios-lg bg-white text-left shadow-ios-lg transition-all w-full sm:max-w-lg">
+        <div className="relative transform overflow-hidden rounded-t-ios-lg sm:rounded-ios-lg bg-white dark:bg-ios-gray-900 text-left shadow-ios-lg transition-all w-full sm:max-w-lg">
           {/* Header */}
-          <div className="bg-white px-4 pt-5 pb-4 sm:p-6">
+          <div className="bg-white dark:bg-ios-gray-900 px-4 pt-5 pb-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-ios-gray-900">{title}</h3>
+              <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white">{title}</h3>
               <button
                 onClick={onClose}
                 className="text-ios-gray-500 hover:text-ios-gray-700 transition-colors"

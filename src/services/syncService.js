@@ -197,21 +197,23 @@ class SyncService {
     }
   }
 
-  // Start auto-sync (every 30 seconds when online)
+  // Start auto-sync (every 10 seconds when online)
   async startSync() {
     if (this.syncInterval) {
       clearInterval(this.syncInterval);
     }
 
-    // Initial sync
+    // Initial sync (push then pull)
     await this.syncToServer();
+    await this.pullFromServer();
 
-    // Auto-sync every 30 seconds
+    // Auto-sync every 10 seconds (bidirectional)
     this.syncInterval = setInterval(async () => {
       if (navigator.onLine) {
         await this.syncToServer();
+        await this.pullFromServer();
       }
-    }, 30000); // 30 seconds
+    }, 10000); // 10 seconds
 
     this.isInitialized = true;
     window.dispatchEvent(new CustomEvent('sync-active'));
@@ -258,6 +260,74 @@ class SyncService {
       await this.syncToServer();
     }
     return { success: true };
+  }
+
+  // Pull fresh data from server and update local database
+  async pullFromServer() {
+    try {
+      const settings = this.getSyncSettings();
+      if (!settings || !settings.enabled) {
+        return { success: false, error: 'Sync not enabled' };
+      }
+
+      const password = sessionStorage.getItem('savena_wallet_password');
+      if (!password) {
+        return { success: false, error: 'No password available' };
+      }
+
+      window.dispatchEvent(new CustomEvent('sync-active'));
+
+      // Fetch wallet data from server
+      const response = await fetch(`${API_URL}/api/wallet/${settings.walletId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${password}`
+        }
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch data');
+      }
+
+      const walletData = await response.json();
+
+      // Update local IndexedDB without clearing existing data
+      const { accountDB, transactionDB, initDB } = await import('./db');
+      const db = await initDB();
+      
+      // Merge accounts (update existing, add new) - use direct db.put to avoid triggering sync
+      for (const acc of walletData.accounts || []) {
+        const existing = await accountDB.getById(acc.id);
+        if (existing) {
+          if (new Date(acc.updatedAt) > new Date(existing.updatedAt)) {
+            // Use direct db.put to avoid triggering sync and balance recalculation
+            await db.put('accounts', acc);
+          }
+        } else {
+          // Create new account with existing ID
+          await db.put('accounts', acc);
+        }
+      }
+
+      // Merge transactions (update existing, add new) - use direct db.put
+      for (const txn of walletData.transactions || []) {
+        const existing = await transactionDB.getById(txn.id);
+        if (!existing) {
+          // Create new transaction with existing ID - no balance update needed as accounts already synced
+          await db.put('transactions', txn);
+        }
+      }
+
+      this.updateLastSyncTime();
+      window.dispatchEvent(new CustomEvent('sync-change', { detail: { direction: 'pull' } }));
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error pulling from server:', error);
+      window.dispatchEvent(new CustomEvent('sync-error', { detail: error }));
+      return { success: false, error: error.message };
+    }
   }
 }
 

@@ -76,10 +76,10 @@ const NewAccount = () => {
                 <span className="text-white text-3xl">{formData.icon}</span>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-ios-gray-900">
+                <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white">
                   {formData.name || 'Account Name'}
                 </h3>
-                <p className="text-sm text-ios-gray-600">
+                <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">
                   {formData.description || 'Account description'}
                 </p>
               </div>

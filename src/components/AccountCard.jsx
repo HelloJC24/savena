@@ -20,16 +20,16 @@ const AccountCard = ({ account, onClick }) => {
             </span>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-ios-gray-900">{account.name}</h3>
+            <h3 className="text-lg font-semibold text-ios-gray-900 dark:text-white">{account.name}</h3>
             {account.description && (
-              <p className="text-sm text-ios-gray-600">{account.description}</p>
+              <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">{account.description}</p>
             )}
           </div>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-ios-gray-900">{formattedBalance}</p>
+          <p className="text-xl font-bold text-ios-gray-900 dark:text-white">{formattedBalance}</p>
           {account.updatedAt && (
-            <p className="text-xs text-ios-gray-500 mt-1">
+            <p className="text-xs text-ios-gray-500 dark:text-ios-gray-400 mt-1">
               {format(new Date(account.updatedAt), 'MMM d, yyyy')}
             </p>
           )}

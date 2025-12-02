@@ -17,6 +17,11 @@ body {
   width: 100%;
 }
 
+.dark body {
+  background-color: #1C1C1E;
+  color: #F2F2F7;
+}
+
 #root {
   width: 100%;
   min-height: 100vh;
@@ -29,11 +34,11 @@ body {
 /* iOS-style components */
 @layer components {
   .ios-card {
-    @apply bg-white rounded-ios shadow-ios;
+    @apply bg-white dark:bg-ios-gray-800 rounded-ios shadow-ios;
   }
   
   .ios-card-lg {
-    @apply bg-white rounded-ios-lg shadow-ios-lg;
+    @apply bg-white dark:bg-ios-gray-800 rounded-ios-lg shadow-ios-lg;
   }
   
   .ios-button {
@@ -45,21 +50,22 @@ body {
   }
   
   .ios-button-secondary {
-    @apply ios-button bg-ios-gray-100 text-ios-blue hover:bg-ios-gray-200;
+    @apply ios-button bg-ios-gray-100 dark:bg-ios-gray-700 text-ios-blue dark:text-ios-blue hover:bg-ios-gray-200 dark:hover:bg-ios-gray-600;
   }
   
   .ios-input {
-    @apply w-full px-4 py-3 rounded-ios bg-ios-gray-50 border border-ios-gray-200 
+    @apply w-full px-4 py-3 rounded-ios bg-ios-gray-50 dark:bg-ios-gray-700 border border-ios-gray-200 dark:border-ios-gray-600
+           text-ios-gray-900 dark:text-white
            focus:outline-none focus:ring-2 focus:ring-ios-blue focus:border-transparent
            transition-all duration-200;
   }
   
   .ios-label {
-    @apply text-sm font-medium text-ios-gray-600 mb-2 block;
+    @apply text-sm font-medium text-ios-gray-600 dark:text-ios-gray-400 mb-2 block;
   }
   
   .page-container {
-    @apply min-h-screen bg-ios-gray-50 pb-20 w-full max-w-full overflow-x-hidden;
+    @apply min-h-screen bg-ios-gray-50 dark:bg-ios-gray-950 pb-20 w-full max-w-full overflow-x-hidden;
   }
   
   .page-content {

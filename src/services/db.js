@@ -44,7 +44,17 @@ export const accountDB = {
       updatedAt: new Date().toISOString(),
     };
     const id = await db.add('accounts', account);
-    return { ...account, id };
+    const result = { ...account, id };
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncChange('account', result);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
+    
+    return result;
   },
 
   // Get all accounts
@@ -71,6 +81,15 @@ export const accountDB = {
       updatedAt: new Date().toISOString(),
     };
     await db.put('accounts', updatedAccount);
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncChange('account', updatedAccount);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
+    
     return updatedAccount;
   },
 
@@ -82,6 +101,14 @@ export const accountDB = {
     const transactions = await transactionDB.getByAccount(id);
     for (const transaction of transactions) {
       await db.delete('transactions', transaction.id);
+    }
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncDelete('account', id);
+    } catch (err) {
+      console.warn('Sync failed:', err);
     }
   },
 
@@ -116,7 +143,17 @@ export const transactionDB = {
     await accountDB.updateBalance(transaction.accountId, amount);
     
     const id = await db.add('transactions', transaction);
-    return { ...transaction, id };
+    const result = { ...transaction, id };
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncChange('transaction', result);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
+    
+    return result;
   },
 
   // Get all transactions
@@ -163,6 +200,15 @@ export const transactionDB = {
       updatedAt: new Date().toISOString(),
     };
     await db.put('transactions', updatedTransaction);
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncChange('transaction', updatedTransaction);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
+    
     return updatedTransaction;
   },
 
@@ -179,6 +225,14 @@ export const transactionDB = {
     await accountDB.updateBalance(transaction.accountId, amount);
     
     await db.delete('transactions', id);
+    
+    // Trigger sync
+    try {
+      const { syncService } = await import('./syncService');
+      await syncService.syncDelete('transaction', id);
+    } catch (err) {
+      console.warn('Sync failed:', err);
+    }
   },
 
   // Filter transactions

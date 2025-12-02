@@ -36,13 +36,13 @@ const AlertModal = ({ isOpen, onClose, title, message, type = 'info' }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-ios-lg shadow-ios-xl max-w-md w-full mx-4 overflow-hidden animate-scale-up">
+      <div className="bg-white dark:bg-ios-gray-900 rounded-ios-lg shadow-ios-xl max-w-md w-full mx-4 overflow-hidden animate-scale-up">
         <div className="p-6 text-center">
           {icons[type]}
-          <h3 className="text-xl font-bold text-ios-gray-900 mb-2">{title}</h3>
-          <div className="text-ios-gray-700 whitespace-pre-line">{message}</div>
+          <h3 className="text-xl font-bold text-ios-gray-900 mb-2 dark:text-white">{title}</h3>
+          <div className="text-ios-gray-700 whitespace-pre-line dark:text-ios-gray-400">{message}</div>
         </div>
-        <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200">
+        <div className="p-4 bg-ios-gray-50 border-t border-ios-gray-200 dark:bg-ios-gray-800 dark:border-ios-gray-700">
           <button
             onClick={onClose}
             className="w-full px-4 py-3 rounded-ios font-semibold text-white bg-ios-blue hover:bg-blue-600 active:scale-95 transition-all"

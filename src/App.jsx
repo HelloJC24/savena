@@ -13,11 +13,15 @@ import RecurringTransactions from './pages/RecurringTransactions';
 import NewRecurring from './pages/NewRecurring';
 import CurrencySettings from './pages/CurrencySettings';
 import Settings from './pages/Settings';
+import { useTheme } from './hooks/useTheme';
 
 // Import recurring processor to start automatic processing
 import './services/recurringProcessor';
 
 function App() {
+  // Initialize theme
+  useTheme();
+
   return (
     <Router>
       <div className="select-none font-sf w-full min-h-screen">

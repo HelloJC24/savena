@@ -124,7 +124,7 @@ const AccountDetail = () => {
         <div className="grid grid-cols-2 gap-3 mb-6">
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-ios-gray-600">Total Deposits</span>
+              <span className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Total Deposits</span>
               <svg className="w-5 h-5 text-ios-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
@@ -136,7 +136,7 @@ const AccountDetail = () => {
           
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-ios-gray-600">Total Withdrawals</span>
+              <span className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Total Withdrawals</span>
               <svg className="w-5 h-5 text-ios-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
               </svg>
@@ -151,24 +151,24 @@ const AccountDetail = () => {
         <div className="ios-card mb-4">
           <div className="divide-y divide-ios-gray-200">
             <div className="p-4">
-              <p className="text-sm text-ios-gray-600 mb-1">Account Name</p>
-              <p className="font-semibold text-ios-gray-900">{account.name}</p>
+              <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 mb-1">Account Name</p>
+              <p className="font-semibold text-ios-gray-900 dark:text-white">{account.name}</p>
             </div>
             <div className="p-4">
-              <p className="text-sm text-ios-gray-600 mb-1">Created</p>
-              <p className="font-semibold text-ios-gray-900">
+              <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 mb-1">Created</p>
+              <p className="font-semibold text-ios-gray-900 dark:text-white">
                 {format(new Date(account.createdAt), 'MMMM dd, yyyy')}
               </p>
             </div>
             <div className="p-4">
-              <p className="text-sm text-ios-gray-600 mb-1">Last Updated</p>
-              <p className="font-semibold text-ios-gray-900">
+              <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 mb-1">Last Updated</p>
+              <p className="font-semibold text-ios-gray-900 dark:text-white">
                 {format(new Date(account.updatedAt), 'MMMM dd, yyyy h:mm a')}
               </p>
             </div>
             <div className="p-4">
-              <p className="text-sm text-ios-gray-600 mb-1">Total Transactions</p>
-              <p className="font-semibold text-ios-gray-900">{transactions.length}</p>
+              <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400 mb-1">Total Transactions</p>
+              <p className="font-semibold text-ios-gray-900 dark:text-white">{transactions.length}</p>
             </div>
           </div>
         </div>
@@ -176,7 +176,7 @@ const AccountDetail = () => {
         {/* Transactions */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-ios-gray-900">Transactions</h3>
+            <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white">Transactions</h3>
             <Link to={`/transactions/new?accountId=${account.id}`}>
               <span className="text-ios-blue text-sm font-medium">Add New</span>
             </Link>

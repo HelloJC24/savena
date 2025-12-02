@@ -31,8 +31,8 @@ const RecurringItem = ({ recurring, account, onEdit, onDelete, onToggle }) => {
             {frequencyIcons[recurring.frequency]}
           </div>
           <div>
-            <h3 className="font-semibold text-ios-gray-900">{recurring.description}</h3>
-            <p className="text-sm text-ios-gray-600">
+            <h3 className="font-semibold text-ios-gray-900 dark:text-white">{recurring.description}</h3>
+            <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">
               {account?.name} • {frequencyLabels[recurring.frequency]}
             </p>
           </div>
@@ -42,18 +42,18 @@ const RecurringItem = ({ recurring, account, onEdit, onDelete, onToggle }) => {
           <div className="font-bold text-lg">
             {isDeposit ? '+' : '-'}{formatCurrency(recurring.amount)}
           </div>
-          <div className="text-xs text-ios-gray-600 capitalize">
+          <div className="text-xs text-ios-gray-600 dark:text-ios-gray-400 capitalize">
             {recurring.category}
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-ios-gray-100">
+      <div className="flex items-center justify-between pt-3 border-t border-ios-gray-100 dark:border-ios-gray-700">
         <div className="flex items-center space-x-2 text-sm">
-          <svg className="w-4 h-4 text-ios-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-ios-gray-600 dark:text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <span className="text-ios-gray-700">
+          <span className="text-ios-gray-700 dark:text-ios-gray-300">
             {recurring.isActive ? 'Next:' : 'Paused on:'} {format(new Date(recurring.nextDate), 'MMM dd, yyyy')}
           </span>
         </div>
@@ -65,7 +65,7 @@ const RecurringItem = ({ recurring, account, onEdit, onDelete, onToggle }) => {
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               recurring.isActive
                 ? 'bg-ios-blue/10 text-ios-blue'
-                : 'bg-ios-gray-200 text-ios-gray-600'
+                : 'bg-ios-gray-200 dark:bg-ios-gray-700 text-ios-gray-600 dark:text-ios-gray-400'
             }`}
           >
             {recurring.isActive ? 'Active' : 'Paused'}

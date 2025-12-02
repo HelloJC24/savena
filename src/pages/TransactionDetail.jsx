@@ -151,8 +151,8 @@ const TransactionDetail = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-ios-gray-600 mb-1">Description</p>
-                  <p className="font-semibold text-ios-gray-900">{transaction.description}</p>
+                  <p className="text-sm text-ios-gray-600 mb-1 dark:text-ios-gray-400">Description</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">{transaction.description}</p>
                 </div>
               </div>
             </div>
@@ -166,8 +166,8 @@ const TransactionDetail = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-ios-gray-600 mb-1">Category</p>
-                  <p className="font-semibold text-ios-gray-900 capitalize">{transaction.category.replace('_', ' ')}</p>
+                  <p className="text-sm text-ios-gray-600 mb-1 dark:text-ios-gray-400">Category</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white capitalize">{transaction.category.replace('_', ' ')}</p>
                 </div>
               </div>
             </div>
@@ -179,8 +179,8 @@ const TransactionDetail = () => {
                   <span className="text-xl">{account?.icon || '💳'}</span>
                 </div>
                 <div>
-                  <p className="text-sm text-ios-gray-600 mb-1">Account</p>
-                  <p className="font-semibold text-ios-gray-900">{account?.name || 'Unknown Account'}</p>
+                  <p className="text-sm text-ios-gray-600 mb-1 dark:text-ios-gray-400">Account</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">{account?.name || 'Unknown Account'}</p>
                 </div>
               </div>
             </div>
@@ -194,8 +194,8 @@ const TransactionDetail = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-ios-gray-600 mb-1">Date & Time</p>
-                  <p className="font-semibold text-ios-gray-900">{formatDateTime(transaction.date)}</p>
+                  <p className="text-sm text-ios-gray-600 mb-1 dark:text-ios-gray-400">Date & Time</p>
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">{formatDateTime(transaction.date)}</p>
                 </div>
               </div>
             </div>
@@ -209,8 +209,8 @@ const TransactionDetail = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-ios-gray-600 mb-1">Transaction ID</p>
-                  <p className="font-mono text-sm text-ios-gray-900">#{transaction.id}</p>
+                  <p className="text-sm text-ios-gray-600 mb-1 dark:text-ios-gray-400">Transaction ID</p>
+                  <p className="font-mono text-sm text-ios-gray-900 dark:text-white">#{transaction.id}</p>
                 </div>
               </div>
             </div>

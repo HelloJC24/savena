@@ -14,10 +14,10 @@ const Button = ({
   
   const variantClasses = {
     primary: 'bg-ios-blue text-white hover:bg-blue-600',
-    secondary: 'bg-ios-gray-100 text-ios-blue hover:bg-ios-gray-200',
+    secondary: 'bg-ios-gray-100 dark:bg-ios-gray-700 text-ios-blue hover:bg-ios-gray-200 dark:hover:bg-ios-gray-600',
     success: 'bg-ios-green text-white hover:bg-green-600',
     danger: 'bg-ios-red text-white hover:bg-red-600',
-    outline: 'border-2 border-ios-blue text-ios-blue hover:bg-ios-blue hover:text-white',
+    outline: 'border-2 border-ios-blue text-ios-blue dark:text-ios-blue hover:bg-ios-blue hover:text-white',
   };
   
   const sizeClasses = {

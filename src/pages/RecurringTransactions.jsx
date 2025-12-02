@@ -112,7 +112,7 @@ const RecurringTransactions = () => {
       <div className="page-container">
         <Header title="Recurring Transactions" />
         <div className="flex items-center justify-center h-64">
-          <div className="text-ios-gray-600">Loading...</div>
+          <div className="text-ios-gray-600 dark:text-ios-gray-400">Loading...</div>
         </div>
       </div>
     );
@@ -130,7 +130,7 @@ const RecurringTransactions = () => {
         <div className="relative grid grid-cols-2 gap-3">
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-ios-gray-600">Monthly Income</span>
+              <span className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Monthly Income</span>
               <span className="hidden text-xs bg-ios-green/10 text-ios-green px-2 py-1 rounded-full">
                 Auto
               </span>
@@ -142,7 +142,7 @@ const RecurringTransactions = () => {
           
           <div className="ios-card p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-ios-gray-600">Monthly Expenses</span>
+              <span className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Monthly Expenses</span>
               <span className="hidden text-xs bg-ios-red/10 text-ios-red px-2 py-1 rounded-full">
                 Auto
               </span>
@@ -161,7 +161,7 @@ const RecurringTransactions = () => {
             className={`text-sm flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
               filter === 'all'
                 ? 'bg-ios-blue text-white'
-                : 'text-ios-gray-600'
+                : 'text-ios-gray-600 dark:text-ios-gray-400 hover:bg-ios-gray-100 dark:hover:bg-ios-gray-700'
             }`}
           >
             All ({stats.total})
@@ -171,7 +171,7 @@ const RecurringTransactions = () => {
             className={`text-sm flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
               filter === 'active'
                 ? 'bg-ios-blue text-white'
-                : 'text-ios-gray-600'
+                : 'text-ios-gray-600 dark:text-ios-gray-400 hover:bg-ios-gray-100 dark:hover:bg-ios-gray-700'
             }`}
           >
             Active ({stats.active})
@@ -181,7 +181,7 @@ const RecurringTransactions = () => {
             className={`text-sm flex-1 py-2 px-4 rounded-lg font-medium transition-all ${
               filter === 'paused'
                 ? 'bg-ios-blue text-white'
-                : 'text-ios-gray-600'
+                : 'text-ios-gray-600 dark:text-ios-gray-400 hover:bg-ios-gray-100 dark:hover:bg-ios-gray-700'
             }`}
           >
             Paused ({stats.paused})
@@ -191,12 +191,12 @@ const RecurringTransactions = () => {
        
 
         {/* Info Card */}
-        <div className="ios-card p-4 bg-ios-blue/5 border border-ios-blue/20">
+        <div className="ios-card p-4 bg-ios-blue/5 dark:bg-ios-blue/10 border border-ios-blue/20 dark:border-ios-blue/30">
           <div className="flex items-start space-x-3">
             <div className="text-2xl">🤖</div>
             <div>
-              <h3 className="font-semibold text-ios-gray-900 mb-1">Automatic Processing</h3>
-              <p className="text-sm text-ios-gray-700">
+              <h3 className="font-semibold text-ios-gray-900 dark:text-white mb-1">Automatic Processing</h3>
+              <p className="text-sm text-ios-gray-700 dark:text-ios-gray-300">
                 The system checks every 60 seconds and automatically creates transactions when they're due. 
                 Active recurring transactions will run on schedule.
               </p>
@@ -208,10 +208,10 @@ const RecurringTransactions = () => {
         {filteredRecurring.length === 0 ? (
           <div className="ios-card p-8 text-center">
             <div className="text-6xl mb-4">🔄</div>
-            <h3 className="text-xl font-bold text-ios-gray-900 mb-2">
+            <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white mb-2">
               {filter === 'all' ? 'No Recurring Transactions' : `No ${filter} Recurring Transactions`}
             </h3>
-            <p className="text-ios-gray-600 mb-4">
+            <p className="text-ios-gray-600 dark:text-ios-gray-400 mb-4">
               {filter === 'all' 
                 ? 'Set up automatic transactions for recurring income or expenses'
                 : `You don't have any ${filter} recurring transactions`

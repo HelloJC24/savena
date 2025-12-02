@@ -100,7 +100,7 @@ const SyncModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-ios-lg shadow-ios-xl max-w-md w-full mx-4 overflow-hidden animate-scale-up">
+      <div className="bg-white dark:bg-ios-gray-900 rounded-ios-lg shadow-ios-xl max-w-md w-full mx-4 overflow-hidden animate-scale-up">
         
         {/* Intro Step */}
         {step === 'intro' && (
@@ -111,13 +111,13 @@ const SyncModal = ({ isOpen, onClose }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-ios-gray-900 mb-2">Wallet Sync</h3>
-              <p className="text-sm text-ios-gray-700 mb-4">
+              <h3 className="text-xl font-bold text-ios-gray-900 mb-2 dark:text-white">Wallet Sync</h3>
+              <p className="text-sm text-ios-gray-700 mb-4 dark:text-ios-gray-400">
                 Sync your wallet data across devices and share with family members.
               </p>
               
               <div className="bg-ios-yellow/10 rounded-ios p-3 mb-4 text-left border border-ios-yellow/20">
-                <p className="text-xs text-ios-gray-800 font-semibold mb-1">Privacy Notice:</p>
+                <p className="text-xs text-ios-gray-800 font-semibold mb-1 dark:text-ios-gray-600">Privacy Notice:</p>
                 <ul className="text-xs text-ios-gray-700 space-y-1">
                   <li>• Data syncs to secure Cloudflare R2 storage</li>
                   <li>• Password required for encryption</li>
@@ -157,11 +157,11 @@ const SyncModal = ({ isOpen, onClose }) => {
               <button onClick={() => setStep('intro')} className="text-ios-blue mb-4">
                 ← Back
               </button>
-              <h3 className="text-xl font-bold text-ios-gray-900 mb-4">Create New Wallet</h3>
+              <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white mb-4">Create New Wallet</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-ios-gray-900 mb-2">
+                  <label className="block text-sm font-semibold text-ios-gray-900 dark:text-ios-gray-400 mb-2">
                     Password *
                   </label>
                   <input
