@@ -46,9 +46,13 @@ class SyncService {
       // Get current local data
       const { accountDB, transactionDB } = await import('./db');
       const { recurringDB } = await import('./recurringDB');
+      const { creditCardDB } = await import('./creditCardDB');
+      const { ccTransactionDB } = await import('./ccTransactionDB');
       const accounts = await accountDB.getAll();
       const transactions = await transactionDB.getAll();
       const recurring = await recurringDB.getAll();
+      const creditCards = await creditCardDB.getAll();
+      const ccTransactions = await ccTransactionDB.getAll();
 
       // Create wallet on server
       const response = await fetch(`${API_URL}/api/wallet/${walletId}`, {
@@ -60,7 +64,9 @@ class SyncService {
         body: JSON.stringify({
           accounts,
           transactions,
-          recurring
+          recurring,
+          creditCards,
+          ccTransactions
         })
       });
 
@@ -110,15 +116,21 @@ class SyncService {
       // Import data to local IndexedDB
       const { accountDB, transactionDB, initDB } = await import('./db');
       const { recurringDB, initRecurringDB } = await import('./recurringDB');
+      const { creditCardDB, initCreditCardDB } = await import('./creditCardDB');
+      const { ccTransactionDB, initCCTransactionDB } = await import('./ccTransactionDB');
       
       // Get direct database access to preserve IDs
       const db = await initDB();
       const recurringDb = await initRecurringDB();
+      const ccDb = await initCreditCardDB();
+      const ccTxnDb = await initCCTransactionDB();
       
       // Clear existing data
       const existingAccounts = await accountDB.getAll();
       const existingTransactions = await transactionDB.getAll();
       const existingRecurring = await recurringDB.getAll();
+      const existingCreditCards = await creditCardDB.getAll();
+      const existingCCTransactions = await ccTransactionDB.getAll();
       
       for (const acc of existingAccounts) {
         await accountDB.delete(acc.id);
@@ -128,6 +140,12 @@ class SyncService {
       }
       for (const rec of existingRecurring) {
         await recurringDB.delete(rec.id);
+      }
+      for (const cc of existingCreditCards) {
+        await creditCardDB.delete(cc.id);
+      }
+      for (const cctxn of existingCCTransactions) {
+        await ccTransactionDB.delete(cctxn.id);
       }
 
       // Import wallet data with ORIGINAL IDs preserved using direct db.put
@@ -139,6 +157,12 @@ class SyncService {
       }
       for (const rec of walletData.recurring || []) {
         await recurringDb.put('recurring', rec);
+      }
+      for (const cc of walletData.creditCards || []) {
+        await ccDb.put('creditCards', cc);
+      }
+      for (const cctxn of walletData.ccTransactions || []) {
+        await ccTxnDb.put('ccTransactions', cctxn);
       }
 
       // Save settings
@@ -179,14 +203,20 @@ class SyncService {
       // Get current local data
       const { accountDB, transactionDB } = await import('./db');
       const { recurringDB } = await import('./recurringDB');
+      const { creditCardDB } = await import('./creditCardDB');
+      const { ccTransactionDB } = await import('./ccTransactionDB');
       const accounts = await accountDB.getAll();
       const transactions = await transactionDB.getAll();
       const recurring = await recurringDB.getAll();
+      const creditCards = await creditCardDB.getAll();
+      const ccTransactions = await ccTransactionDB.getAll();
 
       // console.log('Pushing data to server:', {
       //   accounts: accounts.length,
       //   transactions: transactions.length,
-      //   recurring: recurring.length
+      //   recurring: recurring.length,
+      //   creditCards: creditCards.length,
+      //   ccTransactions: ccTransactions.length
       // });
 
       // Update wallet on server
@@ -199,7 +229,9 @@ class SyncService {
         body: JSON.stringify({
           accounts,
           transactions,
-          recurring
+          recurring,
+          creditCards,
+          ccTransactions
         })
       });
 
@@ -322,13 +354,19 @@ class SyncService {
       // Update local IndexedDB without clearing existing data
       const { accountDB, transactionDB, initDB } = await import('./db');
       const { recurringDB, initRecurringDB } = await import('./recurringDB');
+      const { creditCardDB, initCreditCardDB } = await import('./creditCardDB');
+      const { ccTransactionDB, initCCTransactionDB } = await import('./ccTransactionDB');
       const db = await initDB();
       const recurringDb = await initRecurringDB();
+      const ccDb = await initCreditCardDB();
+      const ccTxnDb = await initCCTransactionDB();
       
       // console.log('Pulling data from server:', {
       //   accounts: walletData.accounts?.length || 0,
       //   transactions: walletData.transactions?.length || 0,
-      //   recurring: walletData.recurring?.length || 0
+      //   recurring: walletData.recurring?.length || 0,
+      //   creditCards: walletData.creditCards?.length || 0,
+      //   ccTransactions: walletData.ccTransactions?.length || 0
       // });
       
       // Merge accounts (update existing, add new) - use direct db.put to avoid triggering sync
@@ -368,6 +406,29 @@ class SyncService {
         } else {
           // Create new recurring transaction with existing ID
           await recurringDb.put('recurring', rec);
+        }
+      }
+
+      // Merge credit cards (update existing, add new)
+      for (const cc of walletData.creditCards || []) {
+        const existing = await creditCardDB.getById(cc.id);
+        if (existing) {
+          // Update if server version is newer
+          if (new Date(cc.updatedAt) > new Date(existing.updatedAt)) {
+            await ccDb.put('creditCards', cc);
+          }
+        } else {
+          // Create new credit card with existing ID
+          await ccDb.put('creditCards', cc);
+        }
+      }
+
+      // Merge credit card transactions (update existing, add new)
+      for (const cctxn of walletData.ccTransactions || []) {
+        const existing = await ccTransactionDB.getById(cctxn.id);
+        if (!existing) {
+          // Create new credit card transaction with existing ID
+          await ccTxnDb.put('ccTransactions', cctxn);
         }
       }
 

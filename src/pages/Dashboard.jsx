@@ -6,7 +6,10 @@ import TransactionItem from '../components/TransactionItem';
 import Button from '../components/Button';
 import StatCard from '../components/StatCard';
 import SyncStatus from '../components/SyncStatus';
+import BottomNav from '../components/BottomNav';
+import ToastContainer from '../components/ToastContainer';
 import { accountDB, transactionDB } from '../services/db';
+import { creditCardDB } from '../services/creditCardDB';
 import { formatCurrency } from '../utils/currency';
 import { format, startOfMonth, endOfMonth, parseISO } from 'date-fns';
 import * as syncService from '../services/syncService';
@@ -14,6 +17,7 @@ import * as syncService from '../services/syncService';
 
 const Dashboard = () => {
   const [accounts, setAccounts] = useState([]);
+  const [creditCards, setCreditCards] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [totalBalance, setTotalBalance] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -36,10 +40,14 @@ const Dashboard = () => {
 
   const loadData = async () => {
     try {
-      const allAccounts = await accountDB.getAll();
-      const allTransactions = await transactionDB.getAll();
+      const [allAccounts, allTransactions, allCreditCards] = await Promise.all([
+        accountDB.getAll(),
+        transactionDB.getAll(),
+        creditCardDB.getAll()
+      ]);
       
       setAccounts(allAccounts);
+      setCreditCards(allCreditCards);
       setRecentTransactions(allTransactions.slice(0, 5));
       
       const total = allAccounts.reduce((sum, acc) => sum + (acc.balance || 0), 0);
@@ -262,6 +270,67 @@ const Dashboard = () => {
           )}
         </div>
 
+        {/* Credit Cards Section */}
+        {creditCards.length > 0 && (
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xl font-bold text-ios-gray-900 dark:text-white">Credit Cards</h3>
+              <Link to="/credit-cards">
+                <span className="text-ios-blue text-sm font-medium">See All</span>
+              </Link>
+            </div>
+            <div className="space-y-3">
+              {creditCards.slice(0, 2).map((card) => {
+                const utilization = card.maxLimit > 0 ? (card.currentBalance / card.maxLimit) * 100 : 0;
+                const available = card.maxLimit - card.currentBalance;
+                
+                return (
+                  <Link key={card.id} to={`/credit-cards/${card.id}`}>
+                    <div
+                      className="ios-card p-4 hover:shadow-lg transition-shadow"
+                      style={{
+                        background: `linear-gradient(135deg, ${card.color}dd 0%, ${card.color} 100%)`,
+                      }}
+                    >
+                      <div className="text-white">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h4 className="font-bold text-lg">{card.name}</h4>
+                            {card.cardNumber && (
+                              <p className="text-sm opacity-80">•••• {card.cardNumber}</p>
+                            )}
+                          </div>
+                          <svg className="w-6 h-6 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                          </svg>
+                        </div>
+                        <div className="flex justify-between items-baseline mb-2">
+                          <span className="text-xs opacity-80">Balance</span>
+                          <span className="text-xl font-bold">{formatCurrency(card.currentBalance)}</span>
+                        </div>
+                        <div className="flex justify-between items-baseline mb-2">
+                          <span className="text-xs opacity-70">Available</span>
+                          <span className="text-sm font-semibold">{formatCurrency(available)}</span>
+                        </div>
+                        <div className="w-full bg-white/20 rounded-full h-1.5 overflow-hidden">
+                          <div
+                            className="bg-white h-full rounded-full transition-all"
+                            style={{ width: `${Math.min(utilization, 100)}%` }}
+                          />
+                        </div>
+                        <div className="flex justify-between text-xs opacity-70 mt-1">
+                          <span>Limit {formatCurrency(card.maxLimit)}</span>
+                          <span>{utilization.toFixed(0)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Recent Transactions */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -295,6 +364,9 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+
+      <BottomNav />
+      <ToastContainer />
     </div>
   );
 };

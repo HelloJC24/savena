@@ -11,6 +11,10 @@ import NewTransaction from './pages/NewTransaction';
 import TransactionDetail from './pages/TransactionDetail';
 import RecurringTransactions from './pages/RecurringTransactions';
 import NewRecurring from './pages/NewRecurring';
+import CreditCards from './pages/CreditCards';
+import CreditCardForm from './pages/CreditCardForm';
+import CreditCardDetail from './pages/CreditCardDetail';
+import CCTransactionForm from './pages/CCTransactionForm';
 import CurrencySettings from './pages/CurrencySettings';
 import Settings from './pages/Settings';
 import { useTheme } from './hooks/useTheme';
@@ -45,6 +49,11 @@ function App() {
           <Route path="/transactions/:id" element={<TransactionDetail />} />
           <Route path="/recurring" element={<RecurringTransactions />} />
           <Route path="/recurring/new" element={<NewRecurring />} />
+          <Route path="/credit-cards" element={<CreditCards />} />
+          <Route path="/credit-cards/new" element={<CreditCardForm />} />
+          <Route path="/credit-cards/:id" element={<CreditCardDetail />} />
+          <Route path="/credit-cards/:id/edit" element={<CreditCardForm />} />
+          <Route path="/credit-cards/:id/:type" element={<CCTransactionForm />} />
           <Route path="/currency" element={<CurrencySettings />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>

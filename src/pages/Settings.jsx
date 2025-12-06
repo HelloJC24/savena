@@ -350,7 +350,7 @@ const Settings = () => {
           </div>
           <h2 className="text-2xl font-bold text-ios-gray-900 dark:text-white mb-2">Savena</h2>
           <p className="text-ios-gray-600 dark:text-ios-gray-400">Virtual Bank App</p>
-          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.7</p>
+          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.2.8</p>
         </div>
 
         {/* Features */}
@@ -391,6 +391,26 @@ const Settings = () => {
                 <div className="text-left">
                   <p className="font-semibold text-ios-gray-900 dark:text-white">Recurring Transactions</p>
                   <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Automatic payments & income</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <button
+              onClick={() => navigate('/credit-cards')}
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-ios-indigo/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-ios-indigo" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Credit Cards</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Track card expenses & payments</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

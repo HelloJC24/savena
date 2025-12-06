@@ -8,6 +8,7 @@ const Select = ({
   placeholder = 'Select an option',
   required = false,
   error,
+  children,
   ...props 
 }) => {
   return (
@@ -30,12 +31,18 @@ const Select = ({
         }}
         {...props}
       >
-        <option value="" disabled>{placeholder}</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
+        {children ? (
+          children
+        ) : (
+          <>
+            <option value="" disabled>{placeholder}</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </>
+        )}
       </select>
       {error && (
         <p className="text-ios-red text-sm mt-1">{error}</p>
