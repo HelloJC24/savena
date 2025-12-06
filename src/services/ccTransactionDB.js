@@ -48,6 +48,7 @@ export const ccTransactionDB = {
       category: transactionData.category || 'Other',
       date: transactionData.date || new Date().toISOString(),
       accountId: transactionData.accountId || null, // For payments from account
+      linkedTransactionId: null, // Will store the wallet transaction ID if payment
       notes: transactionData.notes || '',
       createdAt: new Date().toISOString(),
     };
@@ -62,14 +63,41 @@ export const ccTransactionDB = {
       transaction.type
     );
 
-    // If payment from account, update account balance
+    // If payment from account, create a withdrawal transaction in the account's log
     if (transaction.type === 'payment' && transaction.accountId) {
-      const accountDB = await import('./db');
-      const account = await accountDB.accountDB.getById(transaction.accountId);
-      if (account) {
-        await accountDB.accountDB.update(account.id, {
-          balance: account.balance - transaction.amount
+      try {
+        const { accountDB, transactionDB } = await import('./db');
+        const account = await accountDB.getById(transaction.accountId);
+        const card = await creditCardDB.creditCardDB.getById(transaction.creditCardId);
+        
+        console.log('Creating wallet transaction for payment:', {
+          accountId: transaction.accountId,
+          amount: transaction.amount,
+          currentBalance: account?.balance
         });
+        
+        if (account) {
+          // Create a withdrawal transaction in the account's transaction log
+          // This will automatically deduct from the account balance
+          const walletTransaction = await transactionDB.create({
+            type: 'withdraw',
+            accountId: transaction.accountId,
+            amount: transaction.amount,
+            description: transaction.description || `Credit Card Payment - ${card?.name || 'Card'}`,
+            category: 'Credit Card Payment',
+            date: transaction.date,
+            notes: transaction.notes || `Payment to ${card?.name || 'Credit Card'}`
+          });
+          
+          console.log('Wallet transaction created:', walletTransaction);
+          
+          // Link the transactions
+          transaction.linkedTransactionId = walletTransaction.id;
+          await db.put(STORE_NAME, transaction);
+        }
+      } catch (error) {
+        console.error('Error creating linked wallet transaction:', error);
+        // Don't throw - the credit card payment was still successful
       }
     }
 
@@ -154,14 +182,13 @@ export const ccTransactionDB = {
       reverseType
     );
 
-    // Revert account balance if it was a payment
-    if (transaction.type === 'payment' && transaction.accountId) {
-      const accountDB = await import('./db');
-      const account = await accountDB.accountDB.getById(transaction.accountId);
-      if (account) {
-        await accountDB.accountDB.update(account.id, {
-          balance: account.balance + transaction.amount
-        });
+    // If it was a payment from account, delete the linked wallet transaction
+    if (transaction.type === 'payment' && transaction.accountId && transaction.linkedTransactionId) {
+      const { transactionDB } = await import('./db');
+      try {
+        await transactionDB.delete(transaction.linkedTransactionId);
+      } catch (error) {
+        console.warn('Could not delete linked wallet transaction:', error);
       }
     }
 

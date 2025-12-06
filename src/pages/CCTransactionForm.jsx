@@ -190,7 +190,7 @@ const CCTransactionForm = () => {
       setAlertModal({
         isOpen: true,
         title: 'Error',
-        message: 'Failed to save transaction. Please try again.',
+        message: error.message || 'Failed to save transaction. Please try again.',
         type: 'error',
       });
       setSubmitting(false);

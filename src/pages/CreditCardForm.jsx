@@ -5,6 +5,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import AlertModal from '../components/AlertModal';
 import { creditCardDB } from '../services/creditCardDB';
+import { formatCurrency } from '../utils/currency';
 
 const CARD_COLORS = [
   { name: 'Blue', value: '#3b82f6' },
@@ -226,7 +227,7 @@ const CreditCardForm = () => {
               <p className="text-lg mb-4">•••• {formData.cardNumber}</p>
             )}
             <div className="flex justify-between text-sm opacity-90">
-              <span>Limit: {formData.maxLimit ? `$${parseFloat(formData.maxLimit).toLocaleString()}` : '$0'}</span>
+              <span>Limit: {formData.maxLimit ? formatCurrency(parseFloat(formData.maxLimit)) : formatCurrency(0)}</span>
               <span>Due: Day {formData.billingDay}</span>
             </div>
           </div>

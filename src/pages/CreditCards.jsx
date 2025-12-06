@@ -91,19 +91,19 @@ const CreditCards = () => {
             <div className="grid grid-cols-3 gap-3 mb-6">
               <div className="ios-card p-4 text-center">
                 <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400 mb-1">Total Limit</p>
-                <p className="text-lg font-bold text-ios-gray-900 dark:text-white">
+                <p className="text-base font-bold text-ios-gray-900 dark:text-white">
                   {formatCurrency(totalLimit)}
                 </p>
               </div>
               <div className="ios-card p-4 text-center">
                 <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400 mb-1">Balance</p>
-                <p className="text-lg font-bold text-ios-red">
+                <p className="text-base font-bold text-ios-red">
                   {formatCurrency(totalBalance)}
                 </p>
               </div>
               <div className="ios-card p-4 text-center">
                 <p className="text-xs text-ios-gray-600 dark:text-ios-gray-400 mb-1">Available</p>
-                <p className="text-lg font-bold text-ios-green">
+                <p className="text-base font-bold text-ios-green">
                   {formatCurrency(availableCredit)}
                 </p>
               </div>
