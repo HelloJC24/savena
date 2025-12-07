@@ -31,10 +31,17 @@ const Dashboard = () => {
       loadData();
     };
 
+    // Listen for data updates from pull sync
+    const handleDataUpdate = () => {
+      loadData();
+    };
+
     window.addEventListener('sync-change', handleSyncChange);
+    window.addEventListener('data-updated', handleDataUpdate);
 
     return () => {
       window.removeEventListener('sync-change', handleSyncChange);
+      window.removeEventListener('data-updated', handleDataUpdate);
     };
   }, []);
 
@@ -287,7 +294,7 @@ const Dashboard = () => {
                 return (
                   <Link key={card.id} to={`/credit-cards/${card.id}`}>
                     <div
-                      className="ios-card p-4 hover:shadow-lg transition-shadow"
+                      className="my-2 ios-card p-4 hover:shadow-lg transition-shadow"
                       style={{
                         background: `linear-gradient(135deg, ${card.color}dd 0%, ${card.color} 100%)`,
                       }}

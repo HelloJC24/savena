@@ -17,10 +17,17 @@ const Accounts = () => {
       loadAccounts();
     };
 
+    // Listen for data updates from pull sync
+    const handleDataUpdate = () => {
+      loadAccounts();
+    };
+
     window.addEventListener('sync-change', handleSyncChange);
+    window.addEventListener('data-updated', handleDataUpdate);
 
     return () => {
       window.removeEventListener('sync-change', handleSyncChange);
+      window.removeEventListener('data-updated', handleDataUpdate);
     };
   }, []);
 

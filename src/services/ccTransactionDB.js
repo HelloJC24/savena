@@ -68,6 +68,13 @@ export const ccTransactionDB = {
       try {
         const { accountDB, transactionDB } = await import('./db');
         const account = await accountDB.getById(transaction.accountId);
+        if (!account) {
+          console.warn('Account not found for payment:', transaction.accountId);
+          // Still save the CC transaction even if account linking fails
+          const syncService = await import('./syncService');
+          await syncService.syncService.syncChange('ccTransaction', transaction);
+          return transaction;
+        }
         const card = await creditCardDB.creditCardDB.getById(transaction.creditCardId);
         
         console.log('Creating wallet transaction for payment:', {
@@ -173,6 +180,20 @@ export const ccTransactionDB = {
     const transaction = await db.get(STORE_NAME, id);
     if (!transaction) throw new Error('Credit card transaction not found');
 
+    // If this was a payment with a linked wallet transaction, delete that too
+    if (transaction.linkedTransactionId) {
+      try {
+        const { transactionDB } = await import('./db');
+        const linkedTxn = await transactionDB.getById(transaction.linkedTransactionId);
+        if (linkedTxn) {
+          await transactionDB.delete(transaction.linkedTransactionId);
+        }
+      } catch (error) {
+        console.warn('Failed to delete linked wallet transaction:', error);
+        // Continue with CC transaction deletion
+      }
+    }
+
     // Revert balance change
     const creditCardDB = await import('./creditCardDB');
     const reverseType = transaction.type === 'charge' ? 'payment' : 'charge';
@@ -181,16 +202,6 @@ export const ccTransactionDB = {
       transaction.amount,
       reverseType
     );
-
-    // If it was a payment from account, delete the linked wallet transaction
-    if (transaction.type === 'payment' && transaction.accountId && transaction.linkedTransactionId) {
-      const { transactionDB } = await import('./db');
-      try {
-        await transactionDB.delete(transaction.linkedTransactionId);
-      } catch (error) {
-        console.warn('Could not delete linked wallet transaction:', error);
-      }
-    }
 
     await db.delete(STORE_NAME, id);
 

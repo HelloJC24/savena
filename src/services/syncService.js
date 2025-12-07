@@ -211,13 +211,13 @@ class SyncService {
       const creditCards = await creditCardDB.getAll();
       const ccTransactions = await ccTransactionDB.getAll();
 
-      // console.log('Pushing data to server:', {
-      //   accounts: accounts.length,
-      //   transactions: transactions.length,
-      //   recurring: recurring.length,
-      //   creditCards: creditCards.length,
-      //   ccTransactions: ccTransactions.length
-      // });
+      console.log('[Sync Push] Sending to server:', {
+        accounts: accounts.length,
+        transactions: transactions.length,
+        recurring: recurring.length,
+        creditCards: creditCards.length,
+        ccTransactions: ccTransactions.length
+      });
 
       // Update wallet on server
       const response = await fetch(`${API_URL}/api/wallet/${settings.walletId}`, {
@@ -263,19 +263,34 @@ class SyncService {
     }
 
     // Initial sync (push then pull)
-    await this.syncToServer();
-    await this.pullFromServer();
+    try {
+      console.log('[Sync] Starting initial sync...');
+      await this.syncToServer();
+      await this.pullFromServer();
+      console.log('[Sync] Initial sync completed');
+    } catch (error) {
+      console.error('[Sync] Initial sync error:', error);
+      // Continue to set up the interval even if initial sync fails
+    }
 
     // Auto-sync every 10 seconds (bidirectional)
     this.syncInterval = setInterval(async () => {
       if (navigator.onLine) {
-        await this.syncToServer();
-        await this.pullFromServer();
+        try {
+          console.log('[Sync] Auto-sync running...');
+          await this.syncToServer();
+          await this.pullFromServer();
+          console.log('[Sync] Auto-sync completed');
+        } catch (error) {
+          console.error('[Sync] Auto-sync error:', error);
+          // Don't throw - let the interval continue
+        }
       }
     }, 10000); // 10 seconds
 
     this.isInitialized = true;
     window.dispatchEvent(new CustomEvent('sync-active'));
+    console.log('[Sync] Auto-sync initialized');
     return { success: true };
   }
 
@@ -308,7 +323,14 @@ class SyncService {
   // Trigger immediate sync (call after create/update/delete operations)
   async syncChange(type, data) {
     if (this.isSyncEnabled()) {
-      await this.syncToServer();
+      try {
+        console.log('[Sync] Manual sync triggered for:', type);
+        await this.syncToServer();
+        console.log('[Sync] Manual sync completed');
+      } catch (error) {
+        console.error('[Sync] Manual sync error:', error);
+        // Don't throw - let the operation complete
+      }
     }
     return { success: true };
   }
@@ -316,7 +338,14 @@ class SyncService {
   // Trigger immediate sync (call after delete operations)
   async syncDelete(type, id) {
     if (this.isSyncEnabled()) {
-      await this.syncToServer();
+      try {
+        console.log('[Sync] Manual sync triggered for delete:', type, id);
+        await this.syncToServer();
+        console.log('[Sync] Manual sync completed');
+      } catch (error) {
+        console.error('[Sync] Manual sync error:', error);
+        // Don't throw - let the operation complete
+      }
     }
     return { success: true };
   }
@@ -361,38 +390,47 @@ class SyncService {
       const ccDb = await initCreditCardDB();
       const ccTxnDb = await initCCTransactionDB();
       
-      // console.log('Pulling data from server:', {
-      //   accounts: walletData.accounts?.length || 0,
-      //   transactions: walletData.transactions?.length || 0,
-      //   recurring: walletData.recurring?.length || 0,
-      //   creditCards: walletData.creditCards?.length || 0,
-      //   ccTransactions: walletData.ccTransactions?.length || 0
-      // });
+      console.log('[Sync Pull] Received from server:', {
+        accounts: walletData.accounts?.length || 0,
+        transactions: walletData.transactions?.length || 0,
+        recurring: walletData.recurring?.length || 0,
+        creditCards: walletData.creditCards?.length || 0,
+        ccTransactions: walletData.ccTransactions?.length || 0
+      });
       
       // Merge accounts (update existing, add new) - use direct db.put to avoid triggering sync
+      let accountsUpdated = 0;
+      let accountsAdded = 0;
       for (const acc of walletData.accounts || []) {
         const existing = await accountDB.getById(acc.id);
         if (existing) {
           if (new Date(acc.updatedAt) > new Date(existing.updatedAt)) {
-            // Use direct db.put to avoid triggering sync and balance recalculation
-            // console.log('Updating account:', acc.id);
+            console.log('[Sync Pull] Updating account:', acc.id, acc.name, 'balance:', acc.balance);
             await db.put('accounts', acc);
+            accountsUpdated++;
           }
         } else {
-          // Create new account with existing ID
-          // console.log('Adding new account:', acc.id);
+          console.log('[Sync Pull] Adding new account:', acc.id, acc.name);
           await db.put('accounts', acc);
+          accountsAdded++;
         }
+      }
+      if (accountsUpdated > 0 || accountsAdded > 0) {
+        console.log(`[Sync Pull] Accounts - Updated: ${accountsUpdated}, Added: ${accountsAdded}`);
       }
 
       // Merge transactions (update existing, add new) - use direct db.put
+      let transactionsAdded = 0;
       for (const txn of walletData.transactions || []) {
         const existing = await transactionDB.getById(txn.id);
         if (!existing) {
-          // Create new transaction with existing ID - no balance update needed as accounts already synced
-          // console.log('Adding new transaction:', txn.id, txn.description || txn.type);
+          console.log('[Sync Pull] Adding new transaction:', txn.id, txn.type, txn.amount);
           await db.put('transactions', txn);
+          transactionsAdded++;
         }
+      }
+      if (transactionsAdded > 0) {
+        console.log(`[Sync Pull] Transactions - Added: ${transactionsAdded}`);
       }
 
       // Merge recurring transactions (update existing, add new)
@@ -428,12 +466,16 @@ class SyncService {
         const existing = await ccTransactionDB.getById(cctxn.id);
         if (!existing) {
           // Create new credit card transaction with existing ID
+          // Note: linkedTransactionId may reference a transaction that will be synced separately
           await ccTxnDb.put('ccTransactions', cctxn);
         }
       }
 
       this.updateLastSyncTime();
       window.dispatchEvent(new CustomEvent('sync-change', { detail: { direction: 'pull' } }));
+      
+      // Dispatch event to notify components to reload their data
+      window.dispatchEvent(new CustomEvent('data-updated'));
       
       // Small delay then dispatch complete
       setTimeout(() => {

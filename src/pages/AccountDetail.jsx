@@ -20,6 +20,17 @@ const AccountDetail = () => {
 
   useEffect(() => {
     loadAccount();
+
+    // Listen for data updates from sync
+    const handleDataUpdate = () => {
+      loadAccount();
+    };
+
+    window.addEventListener('data-updated', handleDataUpdate);
+
+    return () => {
+      window.removeEventListener('data-updated', handleDataUpdate);
+    };
   }, [id]);
 
   const loadAccount = async () => {
