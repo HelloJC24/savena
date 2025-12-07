@@ -10,6 +10,7 @@ import { getCurrencySettings } from '../services/currencySettings';
 import { syncService } from '../services/syncService';
 import { useTheme } from '../hooks/useTheme';
 import savenaLogo from '../assets/savena-logo.svg';
+import packageJson from '../../package.json';
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -261,6 +262,46 @@ const Settings = () => {
     });
   };
 
+  const handleUpdateApp = async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (registration) {
+          await registration.update();
+          setAlertModal({
+            isOpen: true,
+            title: 'Checking for Updates',
+            message: 'Checking for app updates...',
+            type: 'info',
+          });
+          
+          // Wait a moment then reload to apply updates
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          setAlertModal({
+            isOpen: true,
+            title: 'No Updates Available',
+            message: 'The app is already up to date.',
+            type: 'info',
+          });
+        }
+      } else {
+        // If no service worker, just reload
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error updating app:', error);
+      setAlertModal({
+        isOpen: true,
+        title: 'Update Check Failed',
+        message: 'Could not check for updates. Please try reloading the page manually.',
+        type: 'error',
+      });
+    }
+  };
+
   const handleExportData = async () => {
     try {
       const { accountDB, transactionDB } = await import('../services/db');
@@ -350,7 +391,7 @@ const Settings = () => {
           </div>
           <h2 className="text-2xl font-bold text-ios-gray-900 dark:text-white mb-2">Savena</h2>
           <p className="text-ios-gray-600 dark:text-ios-gray-400">Virtual Bank App</p>
-          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version 1.3.0</p>
+          <p className="text-sm text-ios-gray-500 dark:text-ios-gray-500 mt-2">Version {packageJson.version}</p>
         </div>
 
         {/* Features */}
@@ -542,6 +583,26 @@ const Settings = () => {
                 <div className="text-left">
                   <p className="font-semibold text-ios-gray-900 dark:text-white">Export Data</p>
                   <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Download backup as JSON</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+
+            <button
+              onClick={handleUpdateApp}
+              className="w-full p-4 flex items-center justify-between hover:bg-ios-gray-50 dark:hover:bg-ios-gray-700 transition-colors"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-ios-teal/10 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-ios-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <p className="font-semibold text-ios-gray-900 dark:text-white">Update App</p>
+                  <p className="text-sm text-ios-gray-600 dark:text-ios-gray-400">Check for latest version</p>
                 </div>
               </div>
               <svg className="w-5 h-5 text-ios-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
